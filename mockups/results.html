@@ -134,6 +134,26 @@
     .legend-dot { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 50%; margin-right: 0.3rem; vertical-align: -0.08rem; }
     .legend-bar { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
     .valdot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.35rem; vertical-align: -0.05rem; }
+    .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 40rem) { .cmp { grid-template-columns: 1fr; } }
+    .variant { border: 1px solid var(--line); border-radius: 0.75rem; padding: 0.9rem 1rem; }
+    .tag-label {
+      font-size: 0.68rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 0.35rem;
+    }
+    .hint { font-size: 0.72rem; color: var(--muted); margin: 0 0 0.8rem; line-height: 1.4; }
+    .axis {
+      display: flex; justify-content: space-between;
+      font-size: 0.62rem; color: var(--muted); padding-top: 0.15rem;
+    }
+    .people { display: flex; gap: 3px; }
+    .people i { flex: 1; height: 0.8rem; border-radius: 2px; }
+    .bkey {
+      display: flex; gap: 0.8rem 1rem; flex-wrap: wrap;
+      font-size: 0.72rem; color: var(--muted);
+      margin-top: 0.8rem; border-top: 1px dashed var(--line); padding-top: 0.6rem;
+    }
+    .bkey i { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
     details { margin-bottom: 1.5rem; }
     details summary {
       cursor: pointer; font-weight: 700; color: var(--teal-dark); padding: 0.4rem 0;
@@ -336,22 +356,50 @@
       'Team Leader: <b>' + leaders.length + '</b> &nbsp;·&nbsp; Team Members: <b>' + members.length + '</b>';
     document.getElementById('memberCount').textContent = members.length;
 
+    function principleMeanForMember(r, p) {
+      var vals = [];
+      TEAM.forEach(function (t) { if (t.principle === p) vals.push(r.answers[t.id]); });
+      return mean(vals);
+    }
+
     function barPanel() {
       var el = document.createElement('div');
       el.className = 'panel';
       var names = Object.keys(memberPrinc).sort();
-      var html = '<h3>Principle profile (team)</h3>' +
-        '<div class="key"><span><i class="legend-bar" style="background:var(--teal)"></i>Members</span>' +
-        '<span><i class="legend-dot" style="background:var(--ink)"></i>Leader</span></div>';
+
+      var a = '<div class="variant"><div class="tag-label">Style A — anchored scale</div>' +
+        '<p class="hint">Bar length = members’ average on the 1–5 scale. The black dot = the leader’s score. Colour = strength.</p>';
       names.forEach(function (p) {
         var mm = memberPrinc[p], lm = leaderPrinc[p];
-        html += '<div class="prof-row"><div class="lbl"><span>' + p + '</span>' +
+        a += '<div class="prof-row"><div class="lbl"><span>' + p + '</span>' +
           '<span class="word">' + (mm ? mm.toFixed(1) + ' — ' + wordForMean(mm) : '—') + '</span></div>' +
           '<div class="prof-bar"><span style="width:' + (mm / 5 * 100) + '%;background:' + strengthColor(mm) + '"></span>' +
           (lm ? '<span class="lead-dot" style="left:' + (lm / 5 * 100) + '%" title="Leader ' + lm.toFixed(1) + '"></span>' : '') +
-          '</div></div>';
+          '</div><div class="axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>';
       });
-      el.innerHTML = html;
+      a += '<div class="bkey"><span><i style="background:var(--strong)"></i>Strong (4–5)</span>' +
+        '<span><i style="background:var(--moderate)"></i>Mixed (3–4)</span>' +
+        '<span><i style="background:var(--weak)"></i>Weak (1–3)</span></div></div>';
+
+      var b = '<div class="variant"><div class="tag-label">Style B — one block per person</div>' +
+        '<p class="hint">Each block is one member’s average for that principle (7 members = 7 blocks). Colour = strength.</p>';
+      names.forEach(function (p) {
+        var mm = memberPrinc[p];
+        b += '<div class="prof-row"><div class="lbl"><span>' + p + '</span>' +
+          '<span class="word">' + (mm ? mm.toFixed(1) + ' — ' + wordForMean(mm) : '—') + '</span></div><div class="people">';
+        members.forEach(function (r) {
+          var m = principleMeanForMember(r, p);
+          b += '<i style="background:' + (m == null ? '#c9d4d6' : strengthColor(m)) + '" title="' + (m ? m.toFixed(1) : 'N/A') + '"></i>';
+        });
+        b += '</div></div>';
+      });
+      b += '<div class="bkey"><span><i style="background:var(--strong)"></i>Strong (4–5)</span>' +
+        '<span><i style="background:var(--moderate)"></i>Mixed (3–4)</span>' +
+        '<span><i style="background:var(--weak)"></i>Weak (1–3)</span></div></div>';
+
+      el.innerHTML = '<h3>Principle profile (team)</h3>' +
+        '<p class="help">Two candidate designs for the same data — pick one.</p>' +
+        '<div class="cmp">' + a + b + '</div>';
       return el;
     }
 
