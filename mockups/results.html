@@ -17,6 +17,9 @@
       --bg: #f5fafa;
       --card: #ffffff;
       --warn: #b3261e;
+      --strong: #2d9c6f;
+      --moderate: #d9a12b;
+      --weak: #d9534f;
     }
     * { box-sizing: border-box; }
     html { font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--ink); }
@@ -77,6 +80,60 @@
       padding: 0.08rem 0.5rem; margin-bottom: 0.35rem;
     }
     .tag.pressure { color: #8a5a00; background: #fff6e0; border-color: #f0ddb0; }
+    .help {
+      font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+      margin: -0.3rem 0 0.8rem;
+    }
+    .key {
+      display: flex; gap: 0.9rem 1.4rem; flex-wrap: wrap;
+      font-size: 0.74rem; color: var(--muted); margin-bottom: 0.9rem;
+    }
+    .key i {
+      display: inline-block; width: 0.72rem; height: 0.72rem;
+      border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem;
+    }
+    .stack {
+      display: inline-flex; height: 0.72rem; border-radius: 999px; overflow: hidden;
+      flex: 1; min-width: 4.5rem; background: #eef3f4;
+    }
+    .stack i { display: block; height: 100%; }
+    .pair {
+      border: 1px solid var(--line); border-radius: 0.6rem;
+      padding: 0.55rem 0.7rem; margin-bottom: 0.55rem;
+    }
+    .pair-text {
+      font-size: 0.78rem; line-height: 1.35; margin-bottom: 0.4rem; color: var(--ink);
+    }
+    .pair-h {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.4rem; font-size: 0.7rem; color: var(--muted);
+    }
+    .pair-h b { color: var(--ink); }
+    .delta { font-weight: 700; font-size: 0.78rem; }
+    .delta.down { color: var(--weak); }
+    .delta.up { color: var(--strong); }
+    .delta.flat { color: var(--muted); font-weight: 400; }
+    .pair-row {
+      display: flex; align-items: center; gap: 0.55rem; font-size: 0.75rem;
+      margin-bottom: 0.3rem;
+    }
+    .pair-row:last-child { margin-bottom: 0; }
+    .pair-row .w { width: 4.6rem; color: var(--muted); flex-shrink: 0; }
+    .pair-row .m { white-space: nowrap; font-weight: 700; }
+    .pair-row .m i { font-style: normal; font-weight: 400; color: var(--muted); font-size: 0.7rem; }
+    .prof-row { margin-bottom: 0.7rem; }
+    .prof-row .lbl { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.82rem; margin-bottom: 0.22rem; }
+    .prof-row .lbl .word { color: var(--muted); font-weight: 400; font-size: 0.74rem; }
+    .prof-bar { position: relative; height: 0.8rem; border-radius: 999px; background: #eef3f4; }
+    .prof-bar > span { display: block; height: 100%; border-radius: 999px; }
+    .prof-bar .lead-dot {
+      position: absolute; top: 50%; width: 0.55rem; height: 0.55rem;
+      border-radius: 50%; background: var(--ink); border: 2px solid #fff;
+      transform: translate(-50%, -50%); box-shadow: 0 0 0 1px var(--line);
+    }
+    .legend-dot { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 50%; margin-right: 0.3rem; vertical-align: -0.08rem; }
+    .legend-bar { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
+    .valdot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.35rem; vertical-align: -0.05rem; }
     details { margin-bottom: 1.5rem; }
     details summary {
       cursor: pointer; font-weight: 700; color: var(--teal-dark); padding: 0.4rem 0;
@@ -137,6 +194,12 @@
 
     <div class="card">
       <h2>What the data shows</h2>
+      <div class="key">
+        <span><i style="background:var(--strong)"></i>Strong</span>
+        <span><i style="background:var(--moderate)"></i>Mixed</span>
+        <span><i style="background:var(--weak)"></i>Weak</span>
+        <span><i style="background:#c9d4d6"></i>N/A (not observed)</span>
+      </div>
       <div class="grid" id="insightsGrid"></div>
     </div>
 
@@ -221,6 +284,25 @@
       return v === 6 ? 'N/A' : (id.indexOf('P') === 0 ? PSCALE : TSCALE)[v - 1];
     }
 
+    var SCALE_COLORS = ['#d9534f', '#e07b39', '#d9a12b', '#a8c95a', '#2d9c6f', '#c9d4d6'];
+
+    function strengthColor(m) { return m >= 4 ? 'var(--strong)' : (m >= 3 ? 'var(--moderate)' : 'var(--weak)'); }
+
+    function wordForMean(m) {
+      if (m == null) return '—';
+      return TSCALE[Math.max(0, Math.min(4, Math.round(m) - 1))];
+    }
+
+    function stackHTML(vals) {
+      var counts = [0, 0, 0, 0, 0, 0];
+      vals.forEach(function (v) { if (v && v >= 1 && v <= 6) counts[v - 1]++; });
+      var html = '<span class="stack">';
+      counts.forEach(function (c, i) {
+        if (c) html += '<i style="width:' + (c / vals.length * 100) + '%;background:' + SCALE_COLORS[i] + '"></i>';
+      });
+      return html + '</span>';
+    }
+
     function mean(vals) {
       var s = 0, n = 0;
       vals.forEach(function (v) { if (v && v !== 6) { s += v; n++; } });
@@ -258,14 +340,16 @@
       var el = document.createElement('div');
       el.className = 'panel';
       var names = Object.keys(memberPrinc).sort();
-      var html = '<h3>Principle profile (team vs leader)</h3><div class="legend">' +
-        '<span class="lg-lead"><i></i>Leader</span><span class="lg-mem"><i></i>Members</span></div>';
+      var html = '<h3>Principle profile (team)</h3>' +
+        '<div class="key"><span><i class="legend-bar" style="background:var(--teal)"></i>Members</span>' +
+        '<span><i class="legend-dot" style="background:var(--ink)"></i>Leader</span></div>';
       names.forEach(function (p) {
-        var lm = mean([leaderPrinc[p]]) || 0;
-        var mm = mean([memberPrinc[p]]) || 0;
-        html += '<div class="bar-row"><div class="lbl"><span>' + p + '</span><span>' +
-          mm.toFixed(1) + ' / ' + lm.toFixed(1) + '</span></div>' +
-          '<div class="bar"><span style="width:' + (mm / 5 * 100) + '%"></span></div></div>';
+        var mm = memberPrinc[p], lm = leaderPrinc[p];
+        html += '<div class="prof-row"><div class="lbl"><span>' + p + '</span>' +
+          '<span class="word">' + (mm ? mm.toFixed(1) + ' — ' + wordForMean(mm) : '—') + '</span></div>' +
+          '<div class="prof-bar"><span style="width:' + (mm / 5 * 100) + '%;background:' + strengthColor(mm) + '"></span>' +
+          (lm ? '<span class="lead-dot" style="left:' + (lm / 5 * 100) + '%" title="Leader ' + lm.toFixed(1) + '"></span>' : '') +
+          '</div></div>';
       });
       el.innerHTML = html;
       return el;
@@ -275,20 +359,28 @@
       var pairs = [['S5', 'S9'], ['S15', 'S16'], ['S31', 'S32'], ['S34', 'S35'], ['S49', 'S48'], ['S51', 'S52']];
       var el = document.createElement('div');
       el.className = 'panel';
-      var html = '<h3>Baseline vs Pressure Shift (team)</h3><ul class="list">';
+      var html = '<h3>Normally vs under pressure</h3>' +
+        '<p class="help">Each pair is the same behaviour asked two ways. A red drop means the team behaves differently under pressure.</p>';
       pairs.forEach(function (pair) {
         var bId = pair[0], pId = pair[1];
         var bVals = members.map(function (r) { return r.answers[bId]; });
         var pVals = members.map(function (r) { return r.answers[pId]; });
         var bm = mean(bVals), pm = mean(pVals);
         var delta = bm && pm ? (pm - bm) : null;
+        var cls = delta == null ? 'flat' : (delta <= -0.2 ? 'down' : (delta >= 0.2 ? 'up' : 'flat'));
+        var dTxt = delta == null ? '—' :
+          (Math.abs(delta) < 0.2 ? '≈ ' + delta.toFixed(1) : (delta > 0 ? '▲ +' + delta.toFixed(1) : '▼ ' + delta.toFixed(1)));
         var bStmt = TEAM.filter(function (t) { return t.id === bId; })[0];
-        var cls = delta < -0.2 ? 'down' : (delta > 0.2 ? 'up' : '');
-        html += '<li><span class="txt">' + bStmt.text.slice(0, 42) + '…</span><span class="val ' + cls + '">' +
-          (bm ? bm.toFixed(1) : '–') + ' → ' + (pm ? pm.toFixed(1) : '–') + (delta ? ' (' + (delta >= 0 ? '+' : '') + delta.toFixed(1) + ')' : '') +
-          '</span></li>';
+        html += '<div class="pair"><div class="pair-text">' + bStmt.text + '</div>' +
+          '<div class="pair-h"><span><b>' + bId + '</b> normally ↔ <b>' + pId + '</b> under pressure</span>' +
+          '<span class="delta ' + cls + '">' + dTxt + '</span></div>' +
+          '<div class="pair-row"><span class="w">Normally</span>' + stackHTML(bVals) +
+          '<span class="m">' + (bm ? bm.toFixed(1) : '—') + ' <i>' + (bm ? wordForMean(bm) : '') + '</i></span></div>' +
+          '<div class="pair-row"><span class="w">Pressure</span>' + stackHTML(pVals) +
+          '<span class="m" style="color:' + (pm ? strengthColor(pm) : 'inherit') + '">' +
+          (pm ? pm.toFixed(1) : '—') + ' <i>' + (pm ? wordForMean(pm) : '') + '</i></span></div>' +
+          '</div>';
       });
-      html += '</ul><div style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem">Negative = team behaviours weaken under pressure.</div>';
       el.innerHTML = html;
       return el;
     }
@@ -304,11 +396,17 @@
       var top = rows.slice(0, 3), bot = rows.slice(-3).reverse();
       var el = document.createElement('div');
       el.className = 'panel';
-      var html = '<h3>Strengths &amp; development areas (members)</h3>';
+      var html = '<h3>Strengths &amp; areas to develop</h3>';
       html += '<div class="subhead" style="margin-top:0">Strongest</div><ul class="list">';
-      top.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val up">' + r.m.toFixed(1) + '</span></li>'; });
+      top.forEach(function (r) {
+        html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span>' +
+          '<span class="val"><i class="valdot" style="background:' + strengthColor(r.m) + '"></i>' + wordForMean(r.m) + '</span></li>';
+      });
       html += '</ul><div class="subhead">Development</div><ul class="list">';
-      bot.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val down">' + r.m.toFixed(1) + '</span></li>'; });
+      bot.forEach(function (r) {
+        html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span>' +
+          '<span class="val"><i class="valdot" style="background:' + strengthColor(r.m) + '"></i>' + wordForMean(r.m) + '</span></li>';
+      });
       html += '</ul>';
       el.innerHTML = html;
       return el;
@@ -334,14 +432,14 @@
       var el = document.createElement('div');
       el.className = 'panel';
       var html = '<h3>Alignment &amp; blind spots</h3>';
-      html += '<div class="subhead" style="margin-top:0">Most aligned</div><ul class="list">';
-      aligned.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val up">σ ' + r.sd.toFixed(1) + '</span></li>'; });
-      html += '</ul><div class="subhead">Most divided</div><ul class="list">';
-      split.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val down">σ ' + r.sd.toFixed(1) + '</span></li>'; });
+      html += '<div class="subhead" style="margin-top:0">The team agrees on</div><ul class="list">';
+      aligned.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val up">In agreement</span></li>'; });
+      html += '</ul><div class="subhead">The team is divided on</div><ul class="list">';
+      split.forEach(function (r) { html += '<li><span class="txt">' + r.text.slice(0, 40) + '…</span><span class="val down">Divided</span></li>'; });
       html += '</ul>';
       if (naRows.length) {
         html += '<div class="subhead">Rarely observed (N/A)</div><ul class="list">';
-        naRows.forEach(function (t) { html += '<li><span class="txt">' + t.text.slice(0, 40) + '…</span><span class="val">' + naCounts[t.id] + '×</span></li>'; });
+        naRows.forEach(function (t) { html += '<li><span class="txt">' + t.text.slice(0, 40) + '…</span><span class="val">' + naCounts[t.id] + ' of ' + members.length + '</span></li>'; });
         html += '</ul>';
       }
       el.innerHTML = html;
