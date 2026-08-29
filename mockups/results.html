@@ -156,6 +156,17 @@
       margin-top: 0.8rem; border-top: 1px dashed var(--line); padding-top: 0.6rem;
     }
     .bkey i { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
+    .guide-block { border: 1px solid var(--line); border-radius: 0.75rem; padding: 0.9rem 1rem; margin-bottom: 0.9rem; }
+    .guide-block:last-child { margin-bottom: 0; }
+    .guide-label { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .guide-scale { display: flex; flex-wrap: wrap; gap: 0.45rem 1.1rem; margin-bottom: 0.5rem; }
+    .guide-scale .gchip { display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; }
+    .guide-scale .gchip i { width: 0.9rem; height: 0.9rem; border-radius: 50%; flex-shrink: 0; }
+    .guide-scale .gchip.na i { border-radius: 0.25rem; }
+    .guide-marker { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 0.2rem; background: var(--ink); border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--ink); transform: rotate(45deg); margin-right: 0.4rem; vertical-align: -0.05rem; }
+    .guide-ul { margin: 0; padding: 0; list-style: none; font-size: 0.83rem; line-height: 1.5; }
+    .guide-ul li { padding: 0.25rem 0; }
+    .guide-ul b { color: var(--ink); }
     .arow { padding: 0.7rem 0; border-bottom: 1px dashed var(--line); }
     .arow:last-child { border-bottom: 0; }
     .arow .q { font-size: 0.88rem; line-height: 1.45; margin-bottom: 0.4rem; }
@@ -221,6 +232,44 @@
         <button class="btn" id="refresh">Refresh</button>
       </div>
       <div class="error" id="err" hidden></div>
+    </div>
+
+    <div class="card">
+      <h2>How to read these results</h2>
+      <p class="help">Everyone answered the same questions about the team. This page shows what the team said as a whole, what the team leader said, and each member's individual answers — so you can spot strengths, weaknesses, and where the team disagrees.</p>
+
+      <div class="guide-block">
+        <div class="guide-label">The 1–5 scale</div>
+        <div class="guide-scale">
+          <span class="gchip"><i style="background:#d9534f"></i>Almost never</span>
+          <span class="gchip"><i style="background:#e07b39"></i>Rarely</span>
+          <span class="gchip"><i style="background:#d9a12b"></i>About half the time</span>
+          <span class="gchip"><i style="background:#a8c95a"></i>Often</span>
+          <span class="gchip"><i style="background:#2d9c6f"></i>Almost always</span>
+          <span class="gchip na"><i style="background:#c9d4d6"></i>N/A — not enough opportunity to observe</span>
+        </div>
+        <p class="help">Higher scores mean the behaviour is more often true of the team. "N/A" is not a score — it means the person couldn't observe that behaviour, so it's left out of averages.</p>
+      </div>
+
+      <div class="guide-block">
+        <div class="guide-label">What the bar colours mean</div>
+        <div class="key">
+          <span><i style="background:var(--strong)"></i>Strong (4–5)</span>
+          <span><i style="background:var(--moderate)"></i>Mixed (3–4)</span>
+          <span><i style="background:var(--weak)"></i>Weak (below 3)</span>
+        </div>
+        <p class="help">Every bar is colour-coded by strength: green = a healthy score, amber = middling, red = worth a conversation.</p>
+      </div>
+
+      <div class="guide-block">
+        <div class="guide-label">Reading a question-by-question row</div>
+        <ul class="guide-ul">
+          <li><span class="guide-marker"></span><b>The dark diamond</b> is the team leader's single answer on that question.</li>
+          <li><b>Team average</b> is the mean of all members' answers on a 0–5 scale (0 = left edge, 5 = full bar).</li>
+          <li><b>Most people answered</b> is the single most common option, e.g. "Often (5 of 7 respondents)".</li>
+          <li><b>Distribution bars</b> (in "Normally vs under pressure") show how many members picked each option — each coloured segment is one option, wider segment = more people.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="card">
@@ -504,7 +553,7 @@
       html += '</ul>';
       if (naRows.length) {
         html += '<div class="subhead">Rarely observed (N/A)</div><ul class="list">';
-        naRows.forEach(function (t) { html += '<li><span class="txt">' + t.text.slice(0, 40) + '…</span><span class="val">' + naCounts[t.id] + ' of ' + members.length + '</span></li>'; });
+        naRows.forEach(function (t) { html += '<li><span class="txt">' + t.text.slice(0, 40) + '…</span><span class="val">' + naCounts[t.id] + ' of ' + members.length + ' respondents</span></li>'; });
         html += '</ul>';
       }
       el.innerHTML = html;
@@ -533,7 +582,7 @@
         var mode = modeOf(teamVals, scale);
         var tag = personal ? 'P' + (i + 1) : (item.ref + ' · ' + item.context + ' · ' + item.principle);
         var modeTxt = 'Most people answered: ' + (mode.tied ? '(tied) ' : '') + mode.label +
-          ' (' + mode.count + ' of ' + mode.total + ')';
+          ' (' + mode.count + ' of ' + mode.total + ' respondents)';
         var leadTxt = lm == null ? '—' : labelFor(id, lm);
         return '<div class="arow"><div class="q"><span class="tag">' + tag + '</span>' + item.text + '</div>' +
           '<div class="barline"><div class="barwrap"><div class="prof-bar">' +
