@@ -73,16 +73,6 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
-function escHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[c]);
-}
-
 function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'team';
 }
@@ -382,10 +372,7 @@ export default {
 
     if (path === '/') {
       const index = await env.ASSETS.fetch(new URL('/', request.url).toString());
-      let html = await index.text();
-      if (env.ADMIN_KEY) {
-        html = html.replace('__DEMO_PASSCODE__', escHtml(env.ADMIN_KEY));
-      }
+      const html = await index.text();
       return new Response(html, {
         status: index.status,
         headers: {
