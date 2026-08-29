@@ -10,12 +10,14 @@ the client uses to view per-assessment reports.
 | --- | --- |
 | `POST /api/submit?t=<role-token>` | Validates a submission against its assessment's snapshotted questions and stores it in D1. `t` must match the role token (`oak` leader, `maple` member). |
 | `POST /api/assessments?key=<ADMIN_KEY>` | Creates an assessment (company + team name + question set), snapshots the set's questions, returns the two shareable survey links. |
-| `GET /api/assessments?key=<ADMIN_KEY>` | Lists assessments with response counts (for the portal dashboard). |
+| `GET /api/assessments?key=<ADMIN_KEY>` | Lists assessments with response counts, question-set title/count, created + last-response dates, and the two survey links (so the portal can re-show links if someone loses one). |
+| `DELETE /api/assessments/<id>?key=<ADMIN_KEY>` | Deletes an assessment and all its responses. |
+| `DELETE /api/responses/<id>?key=<ADMIN_KEY>` | Deletes a single "bad actor" submission so it stops skewing the results. |
 | `GET /api/questionsets?key=<ADMIN_KEY>` | Lists available question sets (for the "New assessment" form). |
 | `GET /api/questions/<assessment-id>` | Returns the assessment's snapshotted questions (used by the survey frontend when a link carries `?a=`). |
 | `GET /api/data?key=<ADMIN_KEY>&assessment=<id>` | Returns one assessment's answers as JSON. Add `&format=csv` for CSV. |
 | `GET /questions.json` | Current question definitions (kept in sync by the generator). |
-| `GET /` | The results portal: passcode login (`ADMIN_KEY`) → assessment dashboard → per-assessment report (dot-strips, findings, CSV/JSON export) + "New assessment" form. |
+| `GET /` | The results portal: passcode login (`ADMIN_KEY`) → assessment dashboard → per-assessment report (survey links to re-share, per-submission review + delete, dot-strips, findings, CSV/JSON export) + "New assessment" form. |
 
 ## Files
 

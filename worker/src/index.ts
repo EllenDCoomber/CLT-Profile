@@ -278,20 +278,31 @@ async function handleListAssessments(request: Request, env: Env): Promise<Respon
   const { results } = await env.DB.prepare(
     `SELECT a.id, a.company, a.team_name, a.question_set_id, a.label, a.created_at,
             (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'leader') AS leaders,
-            (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'member') AS members
+            (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'member') AS members,
+            (SELECT MAX(r.created_at) FROM responses r WHERE r.assessment = a.id) AS last_at
      FROM assessments a ORDER BY a.created_at DESC`
   ).all();
 
-  return json(results.map((r) => ({
-    id: r.id,
-    company: r.company,
-    teamName: r.team_name,
-    questionSetId: r.question_set_id,
-    label: r.label || null,
-    created_at: r.created_at,
-    leaderCount: Number(r.leaders || 0),
-    memberCount: Number(r.members || 0)
-  })));
+  return json(results.map((r) => {
+    const set = questionSets[r.question_set_id as keyof typeof questionSets];
+    return {
+      id: r.id,
+      company: r.company,
+      teamName: r.team_name,
+      questionSetId: r.question_set_id,
+      questionSetTitle: set ? set.title : r.question_set_id,
+      questionCount: set ? set.personal.length + set.team.length : 0,
+      label: r.label || null,
+      created_at: r.created_at,
+      lastResponseAt: r.last_at || null,
+      leaderCount: Number(r.leaders || 0),
+      memberCount: Number(r.members || 0),
+      links: {
+        leader: env.SURVEY_BASE + '?t=' + env.ROLE_LEADER_TOKEN + '&a=' + encodeURIComponent(r.id),
+        member: env.SURVEY_BASE + '?t=' + env.ROLE_MEMBER_TOKEN + '&a=' + encodeURIComponent(r.id)
+      }
+    };
+  }));
 }
 
 async function handleListQuestionSets(request: Request, env: Env): Promise<Response> {
@@ -335,6 +346,31 @@ async function handleData(request: Request, env: Env): Promise<Response> {
   return json(rows);
 }
 
+async function handleDeleteAssessment(request: Request, env: Env, assessmentId: string): Promise<Response> {
+  if (!requireAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
+
+  const assessment = await getAssessment(env, assessmentId);
+  if (!assessment) return json({ error: 'unknown assessment' }, 404);
+
+  await env.DB.prepare('DELETE FROM responses WHERE assessment = ?').bind(assessmentId).run();
+  await env.DB.prepare('DELETE FROM assessments WHERE id = ?').bind(assessmentId).run();
+
+  return json({ ok: true });
+}
+
+async function handleDeleteResponse(request: Request, env: Env, responseId: string): Promise<Response> {
+  if (!requireAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
+
+  const result = await env.DB.prepare('SELECT id FROM responses WHERE id = ?')
+    .bind(responseId)
+    .first();
+  if (!result) return json({ error: 'unknown response' }, 404);
+
+  await env.DB.prepare('DELETE FROM responses WHERE id = ?').bind(responseId).run();
+
+  return json({ ok: true });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -350,6 +386,16 @@ export default {
 
     if (path === '/api/assessments') {
       return handleListAssessments(request, env);
+    }
+
+    const assessmentDeleteMatch = path.match(/^\/api\/assessments\/([^/]+)$/);
+    if (assessmentDeleteMatch && request.method === 'DELETE') {
+      return handleDeleteAssessment(request, env, decodeURIComponent(assessmentDeleteMatch[1]));
+    }
+
+    const responseDeleteMatch = path.match(/^\/api\/responses\/([^/]+)$/);
+    if (responseDeleteMatch && request.method === 'DELETE') {
+      return handleDeleteResponse(request, env, decodeURIComponent(responseDeleteMatch[1]));
     }
 
     if (path === '/api/questionsets') {
