@@ -529,6 +529,7 @@
         var teamVals = members.map(function (r) { return r.answers[id]; });
         var tm = mean(teamVals);
         var lm = leaders.length ? leaders[0].answers[id] : null;
+        var lmNA = lm === 6;
         var mode = modeOf(teamVals, scale);
         var tag = personal ? 'P' + (i + 1) : (item.ref + ' · ' + item.context + ' · ' + item.principle);
         var modeTxt = 'Most people answered: ' + (mode.tied ? '(tied) ' : '') + mode.label +
@@ -537,9 +538,9 @@
         return '<div class="arow"><div class="q"><span class="tag">' + tag + '</span>' + item.text + '</div>' +
           '<div class="barline"><div class="barwrap"><div class="prof-bar">' +
           '<span style="width:' + ((tm || 0) / 5 * 100) + '%;background:' + (tm ? strengthColor(tm) : '#eef3f4') + '"></span>' +
-          (lm ? '<span class="lead-dot" style="left:' + (lm / 5 * 100) + '%" title="Leader: ' + leadTxt + '"></span>' : '') +
+          (lm && !lmNA ? '<span class="lead-dot" style="left:' + (lm / 5 * 100) + '%" title="Leader: ' + leadTxt + '"></span>' : '') +
           '</div><div class="axis"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>' +
-          '<div class="nums">' + (tm ? tm.toFixed(1) : '—') + ' <small>team</small> · ' + (lm != null ? lm : '—') + ' <small>leader</small></div></div>' +
+          '<div class="nums">' + (tm ? tm.toFixed(1) : '—') + ' <small>team</small> · ' + (lm == null ? '—' : (lmNA ? 'N/A' : lm)) + ' <small>leader</small></div></div>' +
           '<div class="mode">' + modeTxt + '</div></div>';
       }).join('');
     }
