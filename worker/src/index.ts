@@ -103,7 +103,6 @@ function validateSubmission(body: unknown): Submission {
 
   const company = typeof b.company === 'string' ? b.company.trim() : '';
   const department = typeof b.department === 'string' ? b.department.trim() : '';
-  if (!company || !department) throw new Error('company and department required');
 
   if (!Array.isArray(b.answers)) throw new Error('answers required');
 
@@ -181,7 +180,7 @@ async function handleSubmit(request: Request, env: Env): Promise<Response> {
   await env.DB.prepare(
     'INSERT INTO responses (id, role, company, department, answers, created_at, assessment) VALUES (?, ?, ?, ?, ?, ?, ?)'
   )
-    .bind(id, submission.role, submission.company, submission.department, JSON.stringify(submission.answers), submission.submittedAt, submission.assessment)
+    .bind(id, submission.role, assessment.company, assessment.team_name, JSON.stringify(submission.answers), submission.submittedAt, submission.assessment)
     .run();
 
   return submitJson(env, { ok: true, id }, 201);
