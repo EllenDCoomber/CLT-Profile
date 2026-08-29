@@ -303,6 +303,15 @@ nav button:first-child:only-child {
   margin-top: 1.5rem;
 }
 
+.admin-link {
+  margin-top: 1.5rem;
+  font-size: 0.82rem;
+}
+
+.admin-link a {
+  color: var(--muted);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

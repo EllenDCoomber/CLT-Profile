@@ -1,7 +1,7 @@
 (() => {
   const app = document.getElementById('app');
   const config = window.CLT_CONFIG;
-  const q = window.CLT_QUESTIONS;
+  const bundled = window.CLT_QUESTIONS;
 
   const esc = (text) =>
     String(text).replace(/[&<>"']/g, (c) => ({
@@ -16,33 +16,53 @@
   const token = params.get('t');
   const hasToken = token !== null;
   const role = hasToken && token === config.roles.leader ? 'leader' : hasToken && token === config.roles.member ? 'member' : null;
+  const assessment = params.get('a') || '';
 
   if (hasToken && !role) {
     app.innerHTML =
-      '<div class="notice"><h1>' + esc(q.title) + '</h1>' +
+      '<div class="notice"><h1>' + esc(bundled.title) + '</h1>' +
       '<p>This survey link isn\u2019t recognised. Please use the link you were sent.</p></div>';
     return;
   }
 
   if (!hasToken) {
-    document.title = q.title;
+    document.title = bundled.title;
     const launcherRoles = [
       { key: 'leader', label: 'Team Leader version', primary: true },
       { key: 'member', label: 'Team Member version', primary: false }
     ];
     app.innerHTML =
-      '<div class="screen"><h1>' + esc(q.title) + '</h1>' +
+      '<div class="screen"><h1>' + esc(bundled.title) + '</h1>' +
       '<p class="subtitle">Choose which version to open.</p>' +
       '<div class="launch">' +
       launcherRoles.map((item) =>
         '<a class="btn' + (item.primary ? ' primary' : '') + '" href="?t=' + config.roles[item.key] + '">' +
         item.label + '</a>'
       ).join('') +
-      '</div></div>';
+      '</div>' +
+      (config.adminUrl
+        ? '<p class="admin-link"><a href="' + esc(config.adminUrl) + '">View results portal (admin)</a></p>'
+        : '') +
+      '</div>';
     return;
   }
 
-  const storageKey = 'clt_profile_' + (role || 'none');
+  async function resolveQuestions() {
+    if (assessment && config.workerUrl) {
+      try {
+        const res = await fetch(config.workerUrl + '/api/questions/' + encodeURIComponent(assessment));
+        if (res.ok) return await res.json();
+      } catch (e) {
+        /* fall through to bundled */
+      }
+    }
+    return bundled;
+  }
+
+  resolveQuestions().then(start);
+
+  function start(q) {
+  const storageKey = 'clt_profile_' + role + (assessment ? '_' + assessment : '');
   const store = {
     load() {
       try {
@@ -290,6 +310,7 @@
   async function submit() {
     const payload = {
       role,
+      assessment,
       company: state.company.trim(),
       department: state.department.trim(),
       submittedAt: new Date().toISOString(),
@@ -312,7 +333,7 @@
       return;
     }
     try {
-      const res = await fetch(config.workerUrl + '/api/submit', {
+      const res = await fetch(config.workerUrl + '/api/submit?t=' + encodeURIComponent(token), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -398,4 +419,5 @@
 
   if (restore.screen >= 1 && restore.screen <= lastScreen) renderQuestions();
   else renderIntro();
+  }
 })();

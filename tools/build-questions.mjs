@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 
 const LEADER_LEAD = [
   'The Creative Leadership Team Profile shows how this leadership team currently creates results and how that experience changes under pressure.',
@@ -153,12 +153,82 @@ const data = {
 let out = 'window.CLT_QUESTIONS = ' + JSON.stringify(data, null, 2) + ';\n';
 writeFileSync(new URL('../questions.js', import.meta.url), out, 'utf8');
 
+const workerData = {
+  title: data.title,
+  personalScale: data.personalScale,
+  teamScale: data.teamScale,
+  personal: data.personal,
+  team: data.team
+};
+writeFileSync(new URL('../worker/src/questions.json', import.meta.url), JSON.stringify(workerData, null, 2) + '\n', 'utf8');
+
 const chunks = [];
 for (let i = 0; i < team.length; i += 11) chunks.push(team.slice(i, i + 11).map((q) => q.id).join(','));
-console.log(`wrote questions.js`);
+console.log(`wrote questions.js and worker/src/questions.json`);
 console.log(`personal: ${PERSONAL.length}`);
 console.log(`team: ${team.length} (${chunks.length} screens of 11: ${chunks.length === 5 ? 'ok' : 'not 5!'})`);
 const pressure = team.filter((q) => q.context === 'Pressure Shift').length;
 console.log(`pressure shift: ${pressure}`);
 const matched = team.filter((q) => q.matched).length;
 console.log(`with matched baseline: ${matched}`);
+
+// ---- question sets (repo files) + worker registry ----
+const setsDir = new URL('../question-sets/', import.meta.url);
+mkdirSync(setsDir, { recursive: true });
+
+const SCREEN_SIZE = 11;
+
+function validateSet(slug, set) {
+  const errs = [];
+  if (!set || typeof set !== 'object') errs.push('not an object');
+  if (!set.title || typeof set.title !== 'string') errs.push('missing string "title"');
+  if (!Array.isArray(set.personalScale) || set.personalScale.length !== 5) errs.push('personalScale must be a 5-item array');
+  if (!Array.isArray(set.teamScale) || set.teamScale.length !== 6) errs.push('teamScale must be a 6-item array');
+  if (!Array.isArray(set.personal) || set.personal.length !== 5) errs.push('personal must have exactly 5 questions');
+  if (!Array.isArray(set.team) || set.team.length === 0 || set.team.length % SCREEN_SIZE !== 0) {
+    errs.push(`team must contain a multiple of ${SCREEN_SIZE} statements`);
+  } else {
+    const screens = set.team.length / SCREEN_SIZE;
+    if (screens < 1) errs.push('team needs at least one screen');
+    const ids = new Set();
+    set.team.forEach((t, i) => {
+      if (!t || typeof t.id !== 'string' || !t.text) errs.push(`team[${i}] needs id + text`);
+      if (t && t.id) {
+        if (ids.has(t.id)) errs.push(`duplicate team id ${t.id}`);
+        ids.add(t.id);
+      }
+    });
+  }
+  if (errs.length) throw new Error(`question set "${slug}":\n  - ${errs.join('\n  - ')}`);
+}
+
+// Write the canonical current set (from questions.csv + hardcoded intros).
+writeFileSync(
+  new URL('clt-current.json', setsDir),
+  JSON.stringify(data, null, 2) + '\n',
+  'utf8'
+);
+
+// Build the registry from every other question-set file, skipping the example.
+const registry = {};
+for (const entry of readdirSync(setsDir).sort()) {
+  if (!entry.endsWith('.json')) continue;
+  const slug = entry.slice(0, -5);
+  if (slug === 'EXAMPLE') continue;
+  let set;
+  try {
+    set = JSON.parse(readFileSync(new URL(entry, setsDir), 'utf8'));
+  } catch (err) {
+    throw new Error(`question set "${slug}": invalid JSON (${err.message})`);
+  }
+  validateSet(slug, set);
+  registry[slug] = set;
+  const screens = Math.ceil(set.team.length / SCREEN_SIZE);
+  console.log(`question set "${slug}": ${set.personal.length} personal, ${set.team.length} team (${screens} screens of ${SCREEN_SIZE})`);
+}
+writeFileSync(
+  new URL('../worker/src/question-sets.json', import.meta.url),
+  JSON.stringify(registry, null, 2) + '\n',
+  'utf8'
+);
+console.log(`wrote question-sets/clt-current.json and worker/src/question-sets.json (${Object.keys(registry).length} set(s) in registry)`);

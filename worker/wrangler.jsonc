@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "clt-profile",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./assets",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "clt-profile",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  "vars": {
+    "ROLE_LEADER_TOKEN": "oak",
+    "ROLE_MEMBER_TOKEN": "maple",
+    "ALLOWED_ORIGIN": "https://ellendcoomber.github.io",
+    "SURVEY_BASE": "https://ellendcoomber.github.io/CLT-Profile/"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

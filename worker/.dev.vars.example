@@ -1,0 +1,6 @@
+DB = "local"
+ROLE_LEADER_TOKEN = "oak"
+ROLE_MEMBER_TOKEN = "maple"
+ALLOWED_ORIGIN = "http://localhost:8787"
+SURVEY_BASE = "http://localhost:8787"
+ADMIN_KEY = "change-me"
