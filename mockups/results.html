@@ -361,8 +361,9 @@
 
     var leaderA = buildAnswers('leader');
     addResponse('leader', 'Acme Marketing', 'Brand & Comms', 2, leaderA);
+    var depts = ['Marketing', 'Brand', 'Comms', 'Creative', 'Digital', 'Strategy', 'Operations'];
     for (var m = 0; m < 7; m++) {
-      addResponse('member', null, null, 1 + m * 2, buildAnswers('member'));
+      addResponse('member', 'Acme Marketing', depts[m], 1 + m * 2, buildAnswers('member'));
     }
     responses.sort(function (a, b) { return a.submittedAt > b.submittedAt ? -1 : 1; });
 

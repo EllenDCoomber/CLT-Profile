@@ -262,8 +262,9 @@
     (function () {
       var leaderA = buildAnswers('leader');
       responses.push({ role: 'leader', company: 'Acme Marketing', department: 'Brand & Comms', submittedAt: daysAgo(2), answers: leaderA });
+      var depts = ['Marketing', 'Brand', 'Comms', 'Creative', 'Digital', 'Strategy', 'Operations'];
       for (var m = 0; m < 7; m++) {
-        responses.push({ role: 'member', company: null, department: null, submittedAt: daysAgo(1 + m * 2), answers: buildAnswers('member') });
+        responses.push({ role: 'member', company: 'Acme Marketing', department: depts[m], submittedAt: daysAgo(1 + m * 2), answers: buildAnswers('member') });
       }
       responses.sort(function (a, b) { return a.submittedAt > b.submittedAt ? -1 : 1; });
     })();

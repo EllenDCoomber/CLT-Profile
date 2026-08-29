@@ -196,8 +196,7 @@
   }
 
   function renderIntroFields() {
-    const required = role === 'leader';
-    const reqMark = required ? ' <span class="required-marker">*</span>' : '';
+    const reqMark = ' <span class="required-marker">*</span>';
     app.insertAdjacentHTML(
       'beforeend',
       '<div class="screen intro"><h1>' + esc(q.beforeBeginHeading) + '</h1>' +
@@ -357,7 +356,7 @@
         persist();
         renderIntro();
       } else if (state.introStep === 1) {
-        if (role === 'leader' && (!state.company.trim() || !state.department.trim())) {
+        if (!state.company.trim() || !state.department.trim()) {
           document.getElementById('fieldError').hidden = false;
           return;
         }
@@ -370,7 +369,7 @@
       persist();
       renderIntro();
     } else if (action === 'start') {
-      if (role === 'leader' && (!state.company.trim() || !state.department.trim())) {
+      if (!state.company.trim() || !state.department.trim()) {
         document.getElementById('fieldError').hidden = false;
         return;
       }
