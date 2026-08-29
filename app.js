@@ -85,6 +85,7 @@
   const teamScreens = Math.ceil(q.team.length / config.questionsPerScreen);
   const lastScreen = 1 + teamScreens;
   const totalQuestions = q.personal.length + q.team.length;
+  const introSteps = assessment ? 2 : 3;
 
   const restore = store.load();
 
@@ -120,7 +121,9 @@
 
   const state = {
     screen: restore.screen >= 0 && restore.screen <= lastScreen ? restore.screen : 0,
-    introStep: restore.introStep >= 0 && restore.introStep <= 2 ? restore.introStep : 0,
+    introStep: assessment && restore.introStep === 1
+      ? 0
+      : restore.introStep >= 0 && restore.introStep <= 2 ? restore.introStep : 0,
     answers: restore.answers || {},
     company: restore.company || '',
     department: restore.department || ''
@@ -178,11 +181,14 @@
   function progressBar() {
     const done = answeredCount();
     const isIntro = state.screen === 0;
+    const introPosition = assessment
+      ? (state.introStep === 0 ? 1 : 2)
+      : state.introStep + 1;
     const left = isIntro
-      ? '<span>Getting ready</span><span>Step ' + (state.introStep + 1) + ' of 3</span>'
+      ? '<span>Getting ready</span><span>Step ' + introPosition + ' of ' + introSteps + '</span>'
       : '<span>' + done + ' of ' + totalQuestions + ' answered</span><span>Screen ' +
         (state.screen + 1) + ' of ' + (lastScreen + 1) + '</span>';
-    const pct = isIntro ? ((state.introStep + 1) / 3) * 100 : (done / totalQuestions) * 100;
+    const pct = isIntro ? (introPosition / introSteps) * 100 : (done / totalQuestions) * 100;
     app.insertAdjacentHTML(
       'afterbegin',
       '<div class="progress">' +
@@ -366,7 +372,7 @@
       location.search = '';
     } else if (action === 'intro-next') {
       if (state.introStep === 0) {
-        state.introStep = 1;
+        state.introStep = assessment ? 2 : 1;
         persist();
         renderIntro();
       } else if (state.introStep === 1) {
@@ -379,11 +385,13 @@
         renderIntro();
       }
     } else if (action === 'intro-back') {
-      state.introStep = Math.max(0, state.introStep - 1);
+      state.introStep = assessment && state.introStep === 2
+        ? 0
+        : Math.max(0, state.introStep - 1);
       persist();
       renderIntro();
     } else if (action === 'start') {
-      if (!state.company.trim() || !state.department.trim()) {
+      if (!assessment && (!state.company.trim() || !state.department.trim())) {
         document.getElementById('fieldError').hidden = false;
         return;
       }
