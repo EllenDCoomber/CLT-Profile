@@ -147,6 +147,21 @@
     .btn.primary:hover { background: var(--teal-dark); }
     .exports .cap { width: 100%; text-align: center; font-size: 0.78rem; color: var(--muted); }
 
+    .summary-head { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .summary-head h2 { margin: 0; font-size: 1.15rem; color: var(--ink); }
+    .sum-note { font-size: 0.78rem; color: var(--muted); }
+    .findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .fblock { border: 1px solid #eef2f3; background: var(--bg); border-radius: 0.8rem; padding: 0.85rem 1rem; cursor: pointer; }
+    .fblock:hover { border-color: var(--teal); }
+    .fblock .ftitle { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; }
+    .fblock .fref { font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+    .fblock .fprinc { font-size: 0.68rem; color: var(--muted); background: #e8edef; border-radius: 999px; padding: 0.04rem 0.5rem; margin-left: 0.35rem; vertical-align: 0.1rem; }
+    .fblock .fdata { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
+    .fblock .fdata b { color: var(--ink); }
+
+    .q.flash { animation: qflash 2.4s ease-out; border-radius: 0.6rem; }
+    @keyframes qflash { 0% { background: #fff3c4; } 100% { background: transparent; } }
+
     footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 1rem 0 2rem; }
   </style>
 </head>
@@ -161,6 +176,14 @@
       <h1>The team's answers</h1>
       <div class="sub" id="subline"></div>
       <div class="counts" id="countsLine"></div>
+    </div>
+
+    <div class="card">
+      <div class="summary-head">
+        <h2>What stands out in the answers</h2>
+        <span class="sum-note">One standout per pattern — click to jump. The full set of answers is below.</span>
+      </div>
+      <div id="findings"></div>
     </div>
 
     <div class="card">
@@ -281,7 +304,7 @@
       var tagCls = underPressure ? ' tag pressure' : '';
       var tagTxt = (underPressure ? 'under pressure · ' : '') + t.ref + ' · ' + t.principle;
       var vals = members.map(function (r) { return r.answers[t.id]; });
-      return '<div class="q"><div class="qtext"><span class="tag' + tagCls + '">' + tagTxt + '</span>' + t.text + '</div>' +
+      return '<div class="q" id="q-' + t.id + '"><div class="qtext"><span class="tag' + tagCls + '">' + tagTxt + '</span>' + t.text + '</div>' +
         strip(vals, leader.answers[t.id], TSCALE) + '</div>';
     }
 
@@ -327,6 +350,71 @@
       groupsHTML += '</div></details>';
     });
     document.getElementById('groups').innerHTML = groupsHTML;
+
+    /* ---- summary findings (computed from the answers) ---- */
+    function teamCounts(id) {
+      var c = [0, 0, 0, 0, 0, 0];
+      members.forEach(function (r) { c[r.answers[id] - 1]++; });
+      return c;
+    }
+    function fblock(title, items) {
+      if (!items.length) return '';
+      var f = items[0];
+      return '<div class="fblock" onclick="jumpTo(\'' + f.t.id + '\')">' +
+        '<div class="ftitle">' + title + '</div>' +
+        '<span class="fref">' + f.t.ref + '</span><span class="fprinc">' + f.t.principle + '</span>' +
+        '<div class="fdata">' + f.line + '</div></div>';
+    }
+
+    var fOpp = [], fSpread = [], fAgreed = [], fNA = [], fPress = [];
+    TEAM.forEach(function (t) {
+      var c = teamCounts(t.id), lv = leader.answers[t.id];
+      var high = c[3] + c[4], low = c[0] + c[1];
+      if (lv === 1 && high >= 4) {
+        fOpp.push({ t: t, n: high, line: 'Leader: <b>' + TSCALE[0] + '</b> · team <b>' + high + ' of 7</b> at Often/Almost always' });
+      } else if (lv === 5 && low >= 4) {
+        fOpp.push({ t: t, n: low, line: 'Leader: <b>' + TSCALE[4] + '</b> · team <b>' + low + ' of 7</b> at Almost never/Rarely' });
+      }
+      var used = c.slice(0, 5).filter(function (n) { return n > 0; }).length;
+      if (used === 5) fSpread.push({ t: t, line: '<b>7 members, 5 different answers</b>' });
+      var mx = 0, mi = -1;
+      c.forEach(function (n, i) { if (i < 5 && n > mx) { mx = n; mi = i; } });
+      if (mx >= 5) fAgreed.push({ t: t, n: mx, line: '<b>' + mx + ' of 7</b> answered <b>' + TSCALE[mi] + '</b>' });
+      if (c[5] >= 2) fNA.push({ t: t, n: c[5], line: '<b>' + c[5] + ' of 7</b> could not observe' });
+      if (t.context === 'Pressure Shift' && t.matched) {
+        var cb = teamCounts(t.matched), cp = teamCounts(t.id), mv = 0;
+        for (var i2 = 0; i2 < 6; i2++) mv += Math.abs(cb[i2] - cp[i2]);
+        if (mv / 2 >= 4) fPress.push({ t: t, n: mv / 2, line: '<b>' + mv / 2 + ' of 7</b> changed vs normally' });
+      }
+    });
+    fOpp.sort(function (a, b) { return b.n - a.n; });
+    fAgreed.sort(function (a, b) { return b.n - a.n; });
+    fNA.sort(function (a, b) { return b.n - a.n; });
+    fPress.sort(function (a, b) { return b.n - a.n; });
+
+    document.getElementById('findings').innerHTML =
+      fblock('Biggest leader–team gap', fOpp) +
+      fblock('Widest spread', fSpread) +
+      fblock('Agreed most', fAgreed) +
+      fblock("Mostly 'not observed'", fNA) +
+      fblock('Changed most under pressure', fPress);
+
+    function jumpTo(ref) {
+      var el = document.getElementById('q-' + ref);
+      if (!el) return;
+      var group = el.closest('details.group');
+      if (group && !group.open) group.open = true;
+      function doScroll() {
+        var r = el.getBoundingClientRect();
+        var top = r.top + (window.pageYOffset || document.documentElement.scrollTop) - window.innerHeight / 2 + r.height / 2;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      }
+      setTimeout(function () {
+        requestAnimationFrame(function () { requestAnimationFrame(doScroll); });
+      }, 0);
+      el.classList.add('flash');
+      setTimeout(function () { el.classList.remove('flash'); }, 2400);
+    }
 
     document.querySelectorAll('details.group').forEach(function (d) {
       d.addEventListener('toggle', function () {
