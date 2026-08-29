@@ -342,14 +342,7 @@
     const action = btn.dataset.action;
     if (action === 'restart') {
       store.clear();
-      state.screen = 0;
-      state.introStep = 0;
-      state.answers = {};
-      state.company = '';
-      state.department = '';
-      order = shuffleQuestions(teamIds);
-      teamRanges = buildRanges();
-      renderIntro();
+      location.search = '';
     } else if (action === 'intro-next') {
       if (state.introStep === 0) {
         state.introStep = 1;

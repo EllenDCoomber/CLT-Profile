@@ -24,7 +24,7 @@ Direct edits to `questions.js` will be overwritten on the next run. Each team st
 
 ## Behavior an agent will otherwise get wrong
 
-- The 55 team statements are **shuffled per session** (Fisher–Yates) and the order is persisted in `localStorage` so a reload keeps the same order. "Start over — clear my answers" on the intro reshuffles.
+- The 55 team statements are **shuffled per session** (Fisher–Yates) and the order is persisted in `localStorage` so a reload keeps the same order. "Start over — clear my answers" on the intro clears the store and navigates back to the bare page (launcher).
 - Respondents see **no question numbers**; numbering was deliberately removed.
 - Scales: personal questions have 5 options (no N/A); team statements have 6 with **"N/A"** = value 6 (value is 1-based index; the label is recorded alongside).
 - The N/A instruction note renders above the statements on team screens.
