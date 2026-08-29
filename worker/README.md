@@ -1,5 +1,9 @@
 # CLT Profile — Cloudflare Worker + D1 backend
 
+> **If you are the client's Cloudflare/ChatGPT agent deploying this, read
+> [`HANDOFF.md`](../HANDOFF.md) at the repo root first** — it explains the intent
+> behind each page and what to report back to the client.
+
 The survey frontend (GitHub Pages) posts answers to this Worker, which stores them in a
 Cloudflare **D1** database. The Worker also serves the passcode-protected **results portal**
 the client uses to view per-assessment reports.
