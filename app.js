@@ -27,21 +27,12 @@
 
   if (!hasToken) {
     document.title = bundled.title;
-    const launcherRoles = [
-      { key: 'leader', label: 'Team Leader version', primary: true },
-      { key: 'member', label: 'Team Member version', primary: false }
-    ];
     app.innerHTML =
-      '<div class="screen"><h1>' + esc(bundled.title) + '</h1>' +
-      '<p class="subtitle">Choose which version to open.</p>' +
-      '<div class="launch">' +
-      launcherRoles.map((item) =>
-        '<a class="btn' + (item.primary ? ' primary' : '') + '" href="?t=' + config.roles[item.key] + '">' +
-        item.label + '</a>'
-      ).join('') +
-      '</div>' +
+      '<div class="screen notice"><h1>' + esc(bundled.title) + '</h1>' +
+      '<p>This survey is only accessible via a personalised assessment link.</p>' +
+      '<p>Please contact your administrator to receive your questionnaire link.</p>' +
       (config.workerUrl
-        ? '<p class="admin-link"><a href="' + esc(config.workerUrl.replace(/\/+$/, '') + '/') + '">View results portal (admin)</a></p>'
+        ? '<p class="admin-link"><a href="' + esc(config.workerUrl.replace(/\/+$/, '') + '/') + '">Results portal (admin)</a></p>'
         : '') +
       '</div>';
     return;
