@@ -23,7 +23,7 @@ the client uses to view per-assessment reports.
 - `src/questions.json` — current question definitions, **generated** from `../questions.csv` by `../tools/build-questions.mjs`. Do not hand-edit.
 - `src/question-sets.json` — **generated** registry of every `../question-sets/*.json` file. Do not hand-edit; rerun the generator after adding/changing a set.
 - `assets/index.html` — the results portal (static SPA).
-- `migrations/0001_init.sql`, `migrations/0002_assessments.sql` — D1 schema.
+- `migrations/0001_init.sql`, `migrations/0002_assessments.sql`, `migrations/0003_assessment_label.sql` — D1 schema.
 - `wrangler.jsonc` — Worker config. The D1 `database_id` placeholder must be filled in at deploy time.
 
 ## Question sets & assessments
@@ -32,80 +32,146 @@ the client uses to view per-assessment reports.
 - **Assessments** are created in the portal ("New assessment"): company + team name + an optional label (e.g. "Baseline", "Round 2") + a question set. The chosen set's questions are **snapshotted into D1** at creation, so a question-set change never affects an assessment that already started. Each assessment gets a unique auto-generated id (slug + random suffix) — re-assessing the same company/team later creates a new assessment with its own id; the label is how you tell rounds apart.
 - Survey links look like `https://<survey-url>/?t=oak&a=<assessment-id>` and `?t=maple&a=<assessment-id>`; the portal prints them when you create an assessment.
 
-## Deploy runbook (client's Cloudflare account)
+## Deploy runbook (executable by an AI agent)
 
-Run these from this `worker/` folder. **The browser login step must be done by the client**
-(they type their Cloudflare email/password in the window that opens).
+This runbook is written to be run **by an AI agent on the client's behalf**. Every step
+is a concrete command with the expected output to check for. There is exactly **one step
+that needs the human client**: the Cloudflare login in step 1 — pause there and ask the
+client to complete it.
 
-### 0. One-time install
+### Prerequisites (verify before starting)
+
+- Node.js 18+ and git installed (`node -v`, `git --version`).
+- The repo cloned locally, and this folder (`worker/`) as the working directory.
+- `npm install` has been run in `worker/` (a `node_modules/` folder exists).
+- The client has a Cloudflare account and can log in when the browser opens.
+
+All commands below run **from the `worker/` folder**.
+
+### Step 0 — Install dependencies (one-time)
 
 ```sh
 npm install
 ```
 
-### 1. Log in to the client's Cloudflare account
+Expected: ends with `found 0 vulnerabilities`. If it fails, retry once, then stop and
+report the error.
+
+### Step 1 — Log in to the client's Cloudflare account (REQUIRES THE CLIENT)
 
 ```sh
 npx wrangler login
 ```
 
-A browser opens. The client logs in with their Cloudflare credentials and clicks
-**Allow**. The terminal shows "Successfully logged in."
+This opens a browser window. **Pause and ask the client to log in with their Cloudflare
+credentials and click "Allow".** Do not proceed until the terminal prints
+`Successfully logged in.` If the environment has no browser (headless), use:
 
-### 2. Create the database
+```sh
+npx wrangler login --browser=false
+```
+
+...which prints a URL — send it to the client, and when they paste back a code, enter it.
+
+### Step 2 — Create the database
 
 ```sh
 npx wrangler d1 create clt-profile
 ```
 
-Copy the printed **database_id** (the UUID) into `wrangler.jsonc`, replacing
-`REPLACE_WITH_D1_DATABASE_ID`.
+Expected output contains a line like `database_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`.
+Capture that UUID. If it says the database already exists, you can use the existing id
+(`npx wrangler d1 list`).
 
-### 3. Apply the schema
+Edit `wrangler.jsonc` and replace the placeholder `REPLACE_WITH_D1_DATABASE_ID` with that
+UUID (keep the quotes). Do not change anything else.
+
+### Step 3 — Apply the schema
 
 ```sh
 npx wrangler d1 migrations apply clt-profile --remote
 ```
 
-### 4. Set the results passcode
+Expected: prints `0001_init.sql ✅`, `0002_assessments.sql ✅`,
+`0003_assessment_label.sql ✅`. If it prompts "continue? yes/no", answer `yes`.
+
+### Step 4 — Set the results passcode
+
+Choose a strong passcode (e.g. from `openssl rand -hex 12` or any random string) — this
+is what the client types on the portal login page. Store it somewhere safe, then:
 
 ```sh
-npx wrangler secret put ADMIN_KEY
+echo "THE_PASSCODE" | npx wrangler secret put ADMIN_KEY
 ```
 
-Type/paste a strong passcode when prompted. This is the code the client enters on the
-portal (and the `key` for all admin API routes). Keep it somewhere safe.
+Expected: `Successfully created secret 'ADMIN_KEY'`. Keep a copy of the passcode — you'll
+need it to verify and to give the client.
 
-> **Mockup note:** while this is a demo, the portal's login screen prints the passcode
-> (the `__DEMO_PASSCODE__` placeholder in `assets/index.html`, replaced server-side with
-> `ADMIN_KEY`). Remove that line before a secure production deployment.
+### Step 5 — Confirm the survey origin allowlist
 
-### 5. Set the survey origin (allowlist)
+Check `wrangler.jsonc` — the `ALLOWED_ORIGIN` value must be the survey's exact origin
+(e.g. `https://ellendcoomber.github.io`). If the survey lives somewhere else, update it.
 
-`ALLOWED_ORIGIN` in `wrangler.jsonc` should be the survey's exact origin, e.g.
-`https://ellendcoomber.github.io`. If the survey moves, update it and redeploy.
-
-### 6. Deploy
+### Step 6 — Deploy
 
 ```sh
 npx wrangler deploy
 ```
 
-It prints a URL like `https://clt-profile.<account-subdomain>.workers.dev`.
-The results portal is `<that-url>/` — share it with the client alongside the passcode.
-Also confirm `SURVEY_BASE` in `wrangler.jsonc` points at the survey's own URL (e.g.
-`https://ellendcoomber.github.io/CLT-Profile/`) so the "New assessment" form builds
-correct share links.
+Expected output contains `Uploaded clt-profile` and `https://clt-profile.<account-subdomain>.workers.dev`.
+Save that URL — it's the portal address. If the domain is already taken, wrangler will
+report it; rename the Worker in `wrangler.jsonc` (`"name": ...`) and retry.
 
-### 7. Connect the survey frontend
+### Step 7 — Verify the deployed Worker
 
-In `config.js` at the repo root, set:
+```sh
+curl -s -o /dev/null -w "%{http_code}" https://clt-profile.<account-subdomain>.workers.dev/api/assessments?key=wrong
+```
+
+Expected: `401` (proves the portal + auth are live). Then:
+
+```sh
+curl -s https://clt-profile.<account-subdomain>.workers.dev/ | head -c 200
+```
+
+Expected: HTML containing `Results portal`.
+
+### Step 8 — Connect the survey frontend
+
+Edit `config.js` at the repo root and set:
 
 ```js
 workerUrl: 'https://clt-profile.<account-subdomain>.workers.dev',
+adminUrl: 'https://clt-profile.<account-subdomain>.workers.dev/',
 ```
 
-Commit and push. The live survey now stores answers.
+Commit and push. The live survey now stores answers in the client's Cloudflare database.
+
+### Step 9 — Smoke-test with seeded data
+
+```sh
+node scripts/seed-test-data.mjs \
+  --url https://clt-profile.<account-subdomain>.workers.dev \
+  --admin-key THE_PASSCODE \
+  --teams 2 --leaders 2
+```
+
+Expected: creates 2 assessments and submits responses. Then open the portal URL in a
+browser, log in with the passcode, and confirm the assessments and their reports appear.
+When done testing, clear it:
+
+```sh
+npx wrangler d1 execute clt-profile --remote --command "DELETE FROM responses; DELETE FROM assessments;"
+```
+
+### Handover
+
+Give the client:
+- Portal URL: `https://clt-profile.<account-subdomain>.workers.dev/`
+- The passcode set in step 4.
+
+Tell them the portal is where they create assessments and view reports; each "New
+assessment" prints the two survey links to share with the team.
 
 ## Optional: custom domain
 
