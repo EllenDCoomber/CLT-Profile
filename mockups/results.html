@@ -127,9 +127,11 @@
     .prof-bar { position: relative; height: 0.8rem; border-radius: 999px; background: #eef3f4; }
     .prof-bar > span { display: block; height: 100%; border-radius: 999px; }
     .prof-bar .lead-dot {
-      position: absolute; top: 50%; width: 0.55rem; height: 0.55rem;
-      border-radius: 50%; background: var(--ink); border: 2px solid #fff;
-      transform: translate(-50%, -50%); box-shadow: 0 0 0 1px var(--line);
+      position: absolute; top: 50%; width: 0.9rem; height: 0.9rem;
+      border-radius: 0.2rem; background: var(--ink);
+      border: 3px solid #fff;
+      transform: translate(-50%, -50%) rotate(45deg);
+      box-shadow: 0 0 0 1.5px var(--ink), 0 0 0 5px rgb(0 0 0 / 15%), 0 0.3rem 0.4rem rgb(0 0 0 / 25%);
     }
     .legend-dot { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 50%; margin-right: 0.3rem; vertical-align: -0.08rem; }
     .legend-bar { display: inline-block; width: 0.72rem; height: 0.72rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
@@ -234,7 +236,7 @@
 
     <div class="card">
       <h2>Question-by-question</h2>
-      <p class="help">Bar = the team's average score (0–5 scale). The black dot = the leader's single answer. "Most people answered" shows the most common choice.</p>
+      <p class="help">Bar = the team's average score (0–5 scale). The dark diamond = the leader's single answer. "Most people answered" shows the most common choice.</p>
       <div id="analysisList"></div>
     </div>
 
@@ -383,7 +385,7 @@
       var names = Object.keys(memberPrinc).sort();
 
       var a = '<div class="variant"><div class="tag-label">Style A — anchored scale</div>' +
-        '<p class="hint">Bar length = members’ average on the 1–5 scale. The black dot = the leader’s score. Colour = strength.</p>';
+        '<p class="hint">Bar length = members’ average on the 1–5 scale. The dark diamond = the leader’s score. Colour = strength.</p>';
       names.forEach(function (p) {
         var mm = memberPrinc[p], lm = leaderPrinc[p];
         a += '<div class="prof-row"><div class="lbl"><span>' + p + '</span>' +
