@@ -13,7 +13,7 @@
     {
       "binding": "DB",
       "database_name": "clt-profile",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      "database_id": "dd81d044-23d8-427a-b07d-6abf9c232d49"
     }
   ],
   "vars": {
