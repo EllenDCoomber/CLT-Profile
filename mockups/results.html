@@ -154,6 +154,15 @@
       margin-top: 0.8rem; border-top: 1px dashed var(--line); padding-top: 0.6rem;
     }
     .bkey i { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 3px; margin-right: 0.3rem; vertical-align: -0.08rem; }
+    .arow { padding: 0.7rem 0; border-bottom: 1px dashed var(--line); }
+    .arow:last-child { border-bottom: 0; }
+    .arow .q { font-size: 0.88rem; line-height: 1.45; margin-bottom: 0.4rem; }
+    .arow .q .tag { margin-bottom: 0.2rem; }
+    .barline { display: flex; align-items: center; gap: 0.9rem; }
+    .barwrap { flex: 1; min-width: 0; }
+    .arow .nums { white-space: nowrap; font-size: 0.78rem; font-weight: 700; }
+    .arow .nums small { color: var(--muted); font-weight: 400; }
+    .arow .mode { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; }
     details { margin-bottom: 1.5rem; }
     details summary {
       cursor: pointer; font-weight: 700; color: var(--teal-dark); padding: 0.4rem 0;
@@ -221,6 +230,12 @@
         <span><i style="background:#c9d4d6"></i>N/A (not observed)</span>
       </div>
       <div class="grid" id="insightsGrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Question-by-question</h2>
+      <p class="help">Bar = the team's average score (0–5 scale). The black dot = the leader's single answer. "Most people answered" shows the most common choice.</p>
+      <div id="analysisList"></div>
     </div>
 
     <details id="summaryTable" open>
@@ -496,6 +511,39 @@
 
     var grid = document.getElementById('insightsGrid');
     [barPanel(), matchedPairsPanel(), strengthsPanel(), consensusPanel()].forEach(function (p) { grid.appendChild(p); });
+
+    function modeOf(vals, scale) {
+      var counts = [0, 0, 0, 0, 0, 0];
+      vals.forEach(function (v) { if (v && v >= 1 && v <= 6) counts[v - 1]++; });
+      var max = Math.max.apply(null, counts);
+      var idx = counts.indexOf(max);
+      var tied = max > 0 && counts.indexOf(max) !== counts.lastIndexOf(max);
+      return { label: idx === 5 ? 'N/A' : scale[idx], count: max, total: vals.length, tied: tied };
+    }
+
+    function analysisRows(list, scale, personal) {
+      return list.map(function (item, i) {
+        var id = item.id;
+        var teamVals = members.map(function (r) { return r.answers[id]; });
+        var tm = mean(teamVals);
+        var lm = leaders.length ? leaders[0].answers[id] : null;
+        var mode = modeOf(teamVals, scale);
+        var tag = personal ? 'P' + (i + 1) : (item.ref + ' · ' + item.context + ' · ' + item.principle);
+        var modeTxt = 'Most people answered: ' + (mode.tied ? '(tied) ' : '') + mode.label +
+          ' (' + mode.count + ' of ' + mode.total + ')';
+        var leadTxt = lm == null ? '—' : labelFor(id, lm);
+        return '<div class="arow"><div class="q"><span class="tag">' + tag + '</span>' + item.text + '</div>' +
+          '<div class="barline"><div class="barwrap"><div class="prof-bar">' +
+          '<span style="width:' + ((tm || 0) / 5 * 100) + '%;background:' + (tm ? strengthColor(tm) : '#eef3f4') + '"></span>' +
+          (lm ? '<span class="lead-dot" style="left:' + (lm / 5 * 100) + '%" title="Leader: ' + leadTxt + '"></span>' : '') +
+          '</div><div class="axis"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>' +
+          '<div class="nums">' + (tm ? tm.toFixed(1) : '—') + ' <small>team</small> · ' + (lm != null ? lm : '—') + ' <small>leader</small></div></div>' +
+          '<div class="mode">' + modeTxt + '</div></div>';
+      }).join('');
+    }
+
+    document.getElementById('analysisList').innerHTML =
+      analysisRows(PERSONAL, PSCALE, true) + analysisRows(TEAM, TSCALE, false);
 
     function personHTML(r) {
       var html = '<div class="person"><div class="who"><b>' +
