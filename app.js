@@ -40,8 +40,8 @@
         item.label + '</a>'
       ).join('') +
       '</div>' +
-      (config.adminUrl
-        ? '<p class="admin-link"><a href="' + esc(config.adminUrl) + '">View results portal (admin)</a></p>'
+      (config.workerUrl
+        ? '<p class="admin-link"><a href="' + esc(config.workerUrl.replace(/\/+$/, '') + '/') + '">View results portal (admin)</a></p>'
         : '') +
       '</div>';
     return;

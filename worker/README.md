@@ -142,10 +142,11 @@ Edit `config.js` at the repo root and set:
 
 ```js
 workerUrl: 'https://clt-profile.<account-subdomain>.workers.dev',
-adminUrl: 'https://clt-profile.<account-subdomain>.workers.dev/',
 ```
 
 Commit and push. The live survey now stores answers in the client's Cloudflare database.
+(The "View results portal (admin)" link on the launcher derives from `workerUrl`
+automatically — there is no separate `adminUrl` setting.)
 
 ### Step 9 — Smoke-test with seeded data
 
