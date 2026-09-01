@@ -6,16 +6,17 @@ const questions = JSON.parse(readFileSync(QUESTIONS_PATH, 'utf8'));
 
 const TEAM = questions.team;
 const PERSONAL = questions.personal;
-const TSCALE = questions.teamScale;
-const PSCALE = questions.personalScale;
+const SCALES = questions.scales;
 
 const ARG = parseArgs();
 const BASE_URL = (ARG.url || 'http://localhost:8787').replace(/\/+$/, '');
-const ADMIN_KEY = ARG['admin-key'] || ARG.key || '';
+const ADMIN_KEY = ARG['admin-key'] || ARG.key || process.env.CLT_ADMIN_KEY || '';
 const TAG = ARG.tag || 'TEST';
 const TEAMS = Number(ARG.teams || 2);
 const MEMBERS = Number(ARG.members || 7);
 const LEADERS = Number(ARG.leaders || 1);
+const OBSERVERS = Number(ARG.observers || 0);
+const EXISTING_ASSESSMENT = ARG.assessment || '';
 const LABELS = (ARG.label || '').split(',').map((s) => s.trim()).filter(Boolean);
 const DO_SCENARIOS = ARG.scenarios === 'true' || ARG.scenarios === '1' || ARG.scenarios === 'yes' || !ARG.scenarios ? true : ARG.scenarios === 'false' || ARG.scenarios === '0' || ARG.scenarios === 'no' ? false : true;
 
@@ -120,6 +121,11 @@ function applyScenarios(teamAnswers, rng) {
 
 /* ---- payload helpers ---- */
 function answerRecord(item, value) {
+  const scale = item.section === 1
+    ? SCALES.frequency
+    : item.section === 4
+      ? SCALES.considered
+      : SCALES.observed;
   return {
     id: item.id,
     ref: item.ref || null,
@@ -127,7 +133,7 @@ function answerRecord(item, value) {
     principle: item.principle || null,
     matched: item.matched || null,
     value,
-    label: value === 6 ? TSCALE[5] : (item.id.startsWith('P') ? PSCALE : TSCALE)[value - 1]
+    label: scale[value - 1]
   };
 }
 
@@ -175,7 +181,7 @@ async function submit(role, token, payload) {
 /* ---- main ---- */
 async function main() {
   console.log(`Seeding test data -> ${BASE_URL}`);
-  console.log(`  teams=${TEAMS} members/team=${MEMBERS} leaders/team=${LEADERS} scenarios=${DO_SCENARIOS} tag="${TAG}"`);
+  console.log(`  teams=${TEAMS} members/team=${MEMBERS} leaders/team=${LEADERS} observers/team=${OBSERVERS} scenarios=${DO_SCENARIOS} tag="${TAG}"`);
   if (!ADMIN_KEY) console.log('  (no ADMIN_KEY given; assessment creation may fail if required)');
 
   const teams = [
@@ -189,13 +195,23 @@ async function main() {
     const teamName = t === 0 ? 'Leadership Team' : `Team ${['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf'][t % 7]}`;
 
     console.log(`\n[${t + 1}/${TEAMS}] ${company} / ${teamName}`);
-    const assessment = await createAssessment(company, teamName, LABELS[t] || null);
-    created++;
+    const assessment = EXISTING_ASSESSMENT
+      ? {
+          id: EXISTING_ASSESSMENT,
+          links: {
+            leader: `${BASE_URL}/?t=oak&a=${encodeURIComponent(EXISTING_ASSESSMENT)}`,
+            member: `${BASE_URL}/?t=maple&a=${encodeURIComponent(EXISTING_ASSESSMENT)}`,
+            observer: `${BASE_URL}/?t=cedar&a=${encodeURIComponent(EXISTING_ASSESSMENT)}`
+          }
+        }
+      : await createAssessment(company, teamName, LABELS[t] || null);
+    if (!EXISTING_ASSESSMENT) created++;
 
     const rng = mulberry32(42 + t);
     const teamAnswers = {
       leaders: Array.from({ length: LEADERS }, () => buildAnswers(rng, 'leader')),
-      members: Array.from({ length: MEMBERS }, () => buildAnswers(rng, 'member'))
+      members: Array.from({ length: MEMBERS }, () => buildAnswers(rng, 'member')),
+      observers: Array.from({ length: OBSERVERS }, () => buildAnswers(rng, 'observer'))
     };
     if (DO_SCENARIOS && t === 0) applyScenarios(teamAnswers, rng);
 
@@ -211,10 +227,16 @@ async function main() {
       await submit('member', 'maple', payload);
       submitted++;
     }
+    for (let oi = 0; oi < OBSERVERS; oi++) {
+      const payload = buildPayload('observer', assessment.id, company, `Observer ${oi + 1}`, teamAnswers.observers[oi]);
+      await submit('observer', 'cedar', payload);
+      submitted++;
+    }
 
     console.log(`  submitted ${submitted} responses`);
     console.log(`  leader link: ${assessment.links.leader}`);
     console.log(`  member link: ${assessment.links.member}`);
+    console.log(`  observer link: ${assessment.links.observer}`);
   }
 
   console.log(`\nDone. Created ${created} assessment(s). Open ${BASE_URL}/ to view.`);
