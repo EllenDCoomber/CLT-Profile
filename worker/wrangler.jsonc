@@ -19,6 +19,7 @@
   "vars": {
     "ROLE_LEADER_TOKEN": "oak",
     "ROLE_MEMBER_TOKEN": "maple",
+    "ROLE_OBSERVER_TOKEN": "cedar",
     "ALLOWED_ORIGIN": "https://ellendcoomber.github.io",
     "SURVEY_BASE": "https://ellendcoomber.github.io/CLT-Profile/"
   },

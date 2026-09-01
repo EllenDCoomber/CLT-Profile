@@ -1,234 +1,91 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 
-const LEADER_LEAD = [
-  'The Creative Leadership Team Profile shows how this leadership team currently creates results and how that experience changes under pressure.',
-  'It provides a baseline for strengthening how the team works together and delivers against its strategic priorities, and for understanding the impact of that work over time.'
-];
-
-const LEADER_ABOUT = [
-  'Your responses are confidential. Expanding Possibilities will be able to identify your responses as the team leader\u2019s, but your individual answers will not be shared with anyone else or reported to the team.',
-  'Knowing which responses are yours allows us to compare how you experience the team with how the team collectively experiences itself. This can help us identify important differences in perspective and use them to inform the work with the team.',
-  'The responses from the other members of the leadership team remain anonymous and are combined to create an overall team picture.'
-];
-
-const MEMBER_ABOUT = [
-  'Your responses are anonymous. Nobody in the team, your leader, or Expanding Possibilities will see your individual answers. Your responses are combined with those of the other members of your leadership team to create an overall picture of the team.'
-];
-
-const INSTRUCTIONS = {
-  leader: [
-    'The first five questions are about you in your role as a leader. The remaining questions ask about your experience of the leadership team as a whole.',
-    'There are no right or wrong answers and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.',
-    'Please respond with the answer that feels most accurate, without overthinking it. Answer based on what actually happens, rather than what you think should happen or what you would ideally like to be true.'
-  ],
-  member: [
-    'The first five questions are about you in your role as a team member. The remaining questions ask about your experience of the leadership team as a whole.',
-    'There are no right or wrong answers and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.',
-    'Please respond with the answer that feels most accurate, without overthinking it. Answer based on what actually happens, rather than what you think should happen or what you would ideally like to be true.'
-  ]
-};
-
-const SCALE_INTRO = 'For each statement, choose the response that best reflects how frequently it has been true in practice over approximately the last three months:';
-const NEO_NOTE = 'If you have not had enough opportunity to observe the behaviour described, please select \u201cN/A\u201d rather than choosing a frequency.';
-const TIMING = '15\u201320 minutes';
-
-const PERSONAL_SCALE = ['Almost never', 'Rarely', 'About half the time', 'Often', 'Almost always'];
-const TEAM_SCALE = [...PERSONAL_SCALE, 'N/A'];
-
-const PERSONAL = [
-  { id: 'P1', text: 'I have felt clear about our company\u2019s mission, vision and strategy.' },
-  { id: 'P2', text: 'I have felt inspired by what we are here to create.' },
-  { id: 'P3', text: 'I have felt valued as a member of this leadership team.' },
-  { id: 'P4', text: 'I have been clear about what success looks like for us.' },
-  { id: 'P5', text: 'I have felt that we are winning as a team.' }
-];
-
 function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let field = '';
-  let inQuotes = false;
+  const rows = []; let row = []; let field = ''; let quoted = false;
   for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (inQuotes) {
-      if (char === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += char;
-      }
-    } else if (char === '"') {
-      inQuotes = true;
-    } else if (char === ',') {
-      row.push(field.trim());
-      field = '';
-    } else if (char === '\n' || char === '\r') {
-      if (char === '\r' && text[i + 1] === '\n') i++;
-      if (field.length > 0 || row.length > 0) {
-        row.push(field.trim());
-        rows.push(row);
-      }
-      row = [];
-      field = '';
-    } else {
-      field += char;
-    }
+    const c = text[i];
+    if (quoted) {
+      if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ',') { row.push(field); field = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      if (field || row.length) { row.push(field); rows.push(row); }
+      row = []; field = '';
+    } else field += c;
   }
-  if (field.length > 0 || row.length > 0) {
-    row.push(field.trim());
-    rows.push(row);
-  }
+  if (field || row.length) { row.push(field); rows.push(row); }
   return rows;
 }
 
-const source = readFileSync(new URL('../questions.csv', import.meta.url), 'utf8');
-const rows = parseCsv(source);
-const header = rows[0];
-const findIndex = (name) => header.indexOf(name);
-
-const col = {
-  ref: findIndex('S-reference'),
-  context: findIndex('Context'),
-  principle: findIndex('Primary Principle'),
-  premise: findIndex('High Level Premise'),
-  subPremise: findIndex('Sub-premise'),
-  behaviour: findIndex('Behaviour'),
-  text: findIndex('Final Question'),
-  matched: findIndex('Matched Q')
-};
-
-const team = rows.slice(1).filter((r) => r[col.ref]).map((r) => ({
-  id: r[col.ref],
-  ref: r[col.ref],
-  context: r[col.context] || 'Baseline',
-  principle: r[col.principle] || '',
-  premise: r[col.premise] || '',
-  subPremise: r[col.subPremise] || '',
-  behaviour: r[col.behaviour] || '',
-  matched: r[col.matched] || null,
-  text: r[col.text]
+const rows = parseCsv(readFileSync(new URL('../questions.csv', import.meta.url), 'utf8'));
+const header = rows.shift();
+const at = (name) => header.indexOf(name);
+const items = rows.filter((r) => r[at('Reference')]).map((r) => ({
+  id: r[at('Reference')], ref: r[at('Reference')], section: Number(r[at('Section')]),
+  sectionTitle: r[at('Section Title')], context: r[at('Reporting Treatment')] || null,
+  principle: r[at('Primary Principle')] || null, premise: r[at('High Level Premise')] || null,
+  subPremise: r[at('Sub-premise')] || null, behaviour: r[at('Behaviour')] || null,
+  matched: r[at('Matched Q')] || null, text: r[at('Final Question')]
 }));
 
-const data = {
-  title: 'The Creative Leadership Team Profile',
-  intro: {
-    leader: {
-      heading: 'The Creative Leadership Team Profile \u2013 Team Leader',
-      lead: LEADER_LEAD,
-      aboutHeading: 'About your answers',
-      about: LEADER_ABOUT,
-      instructionsHeading: 'Instructions',
-      instructions: INSTRUCTIONS.leader,
-      scaleIntro: SCALE_INTRO,
-      neoNote: NEO_NOTE,
-      timing: TIMING,
-      thanks: 'Thank you.',
-      sign: 'Ellen'
-    },
-    member: {
-      heading: 'The Creative Leadership Team Profile',
-      lead: LEADER_LEAD,
-      aboutHeading: 'About your answers',
-      about: MEMBER_ABOUT,
-      instructionsHeading: 'Instructions',
-      instructions: INSTRUCTIONS.member,
-      scaleIntro: SCALE_INTRO,
-      neoNote: NEO_NOTE,
-      timing: TIMING,
-      thanks: 'Thank you.',
-      sign: 'Ellen'
-    }
-  },
-  beforeBeginHeading: 'Before you begin',
-  personalScale: PERSONAL_SCALE,
-  teamScale: TEAM_SCALE,
-  personal: PERSONAL,
-  team
+if (items.length !== 57) throw new Error(`Expected 57 fixed-order questions, found ${items.length}`);
+for (let i = 1; i <= 4; i++) if (!items.some((q) => q.section === i)) throw new Error(`Missing Section ${i}`);
+
+const PRODUCT = 'The Creative Leadership Baseline View';
+const COMMON_LEAD = [
+  PRODUCT + ' shows how this leadership team currently creates results and how that changes under pressure.',
+  'It is a snapshot in time that allows the engagement to be designed around the specific needs, dynamics and priorities of this leadership team. It provides a baseline for strengthening how the team works together and delivers against its strategic priorities.',
+  'There will be a follow-up view approximately 90 days after the offsite, enabling the team to see what’s shifted, where progress has been made and where it wants to focus next.'
+];
+const COMMON_INSTRUCTIONS = [
+  'There are no right or wrong answers, and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.',
+  'Please consider the questions carefully and answer as honestly and candidly as possible, answering based on what actually happens, rather than what you think should happen or what you would ideally like to be true.',
+  'There are 57 questions across 4 sections. Please allow 45–60 mins to complete.'
+];
+const intros = {
+  member: { version: 'TEAM MEMBER VERSION', heading: PRODUCT, lead: COMMON_LEAD, about: [
+    'Your responses are anonymous. Your name is not associated with your answers, so neither your team, your leader nor Expanding Possibilities can identify who gave any individual response.',
+    'Your responses are combined with those of the other members of your leadership team to create an overall picture of how the team currently operates.'
+  ], instructions: COMMON_INSTRUCTIONS },
+  leader: { version: 'TEAM LEADER VERSION', heading: PRODUCT, lead: COMMON_LEAD, about: [
+    'Your responses are confidential. Expanding Possibilities will be able to identify your responses as the team leader’s, but your individual answers will not be shared with anyone else or reported to the team.',
+    'Knowing which responses are yours allows us to compare how you experience the team with how the team collectively experiences itself. This can help us identify important differences in perspective and use them to inform the work with the team.',
+    'The responses from the other members of the leadership team remain anonymous and are combined to create an overall team picture.'
+  ], instructions: COMMON_INSTRUCTIONS },
+  observer: { version: 'TEAM OBSERVER VERSION', heading: PRODUCT, lead: COMMON_LEAD, about: [
+    'Your responses are confidential. Expanding Possibilities may be able to identify your responses as part of the extended team at the offsite, but your individual answers will not be shared with anyone else or reported to the team.'
+  ], instructions: COMMON_INSTRUCTIONS }
 };
-
-let out = 'window.CLT_QUESTIONS = ' + JSON.stringify(data, null, 2) + ';\n';
-writeFileSync(new URL('../questions.js', import.meta.url), out, 'utf8');
-
-const workerData = {
-  title: data.title,
-  personalScale: data.personalScale,
-  teamScale: data.teamScale,
-  personal: data.personal,
-  team: data.team
+const scales = {
+  frequency: ['Almost never', 'Rarely', 'About half the time', 'Often', 'Almost always'],
+  observed: ['Almost never', 'Rarely', 'About half the time', 'Often', 'Almost always', 'Not enough opportunity to observe'],
+  considered: ['Almost never', 'Rarely', 'About half the time', 'Often', 'Almost always', 'Never considered']
 };
-writeFileSync(new URL('../worker/src/questions.json', import.meta.url), JSON.stringify(workerData, null, 2) + '\n', 'utf8');
+const sections = [
+  { id: 1, title: 'Your experience as a leader', scale: 'frequency', instructions: 'These questions are about your experience as a leader in this team. Thinking about approximately the last three months, choose the response that best reflects how frequently each statement has been true for you.' },
+  { id: 2, title: 'Structures for Success', prefix: 'As a team…', scale: 'observed', instructions: 'These questions ask about your experience of the leadership team over the last three months. Please choose the response that best reflects how frequently you have observed the following. If, after taking time to consider, you feel that you haven’t had the opportunity to observe the behavior described please select ‘Not enough opportunity to observe’.' },
+  { id: 3, title: 'Team Dynamics for Effective Creation', prefix: 'As a team…', scale: 'observed', instructions: 'These questions ask about your experience of the leadership team over the last three months. Please choose the response that best reflects how frequently you have observed the following. If, after taking time to consider, you feel that you haven’t had the opportunity to observe the behavior described please select ‘Not enough opportunity to observe’.' },
+  { id: 4, title: 'Impact and Contribution', scale: 'considered', instructions: 'These questions ask about your impact and contribution to the team over the last three months. There may be some concepts here you have not considered before. If, after taking time to reflect, you are unsure please check the ‘never considered’ option.' }
+];
+const data = { title: PRODUCT, beforeBeginHeading: 'Before you begin', timing: '45–60 mins', intros, scales, sections,
+  personal: items.filter((q) => q.section === 1), team: items.filter((q) => q.section !== 1) };
 
-const chunks = [];
-for (let i = 0; i < team.length; i += 11) chunks.push(team.slice(i, i + 11).map((q) => q.id).join(','));
-console.log(`wrote questions.js and worker/src/questions.json`);
-console.log(`personal: ${PERSONAL.length}`);
-console.log(`team: ${team.length} (${chunks.length} screens of 11: ${chunks.length === 5 ? 'ok' : 'not 5!'})`);
-const pressure = team.filter((q) => q.context === 'Pressure Shift').length;
-console.log(`pressure shift: ${pressure}`);
-const matched = team.filter((q) => q.matched).length;
-console.log(`with matched baseline: ${matched}`);
-
-// ---- question sets (repo files) + worker registry ----
+writeFileSync(new URL('../questions.js', import.meta.url), 'window.CLT_QUESTIONS = ' + JSON.stringify(data, null, 2) + ';\n');
+writeFileSync(new URL('../worker/src/questions.json', import.meta.url), JSON.stringify(data, null, 2) + '\n');
 const setsDir = new URL('../question-sets/', import.meta.url);
 mkdirSync(setsDir, { recursive: true });
-
-const SCREEN_SIZE = 11;
-
-function validateSet(slug, set) {
-  const errs = [];
-  if (!set || typeof set !== 'object') errs.push('not an object');
-  if (!set.title || typeof set.title !== 'string') errs.push('missing string "title"');
-  if (!Array.isArray(set.personalScale) || set.personalScale.length !== 5) errs.push('personalScale must be a 5-item array');
-  if (!Array.isArray(set.teamScale) || set.teamScale.length !== 6) errs.push('teamScale must be a 6-item array');
-  if (!Array.isArray(set.personal) || set.personal.length !== 5) errs.push('personal must have exactly 5 questions');
-  if (!Array.isArray(set.team) || set.team.length === 0 || set.team.length % SCREEN_SIZE !== 0) {
-    errs.push(`team must contain a multiple of ${SCREEN_SIZE} statements`);
-  } else {
-    const screens = set.team.length / SCREEN_SIZE;
-    if (screens < 1) errs.push('team needs at least one screen');
-    const ids = new Set();
-    set.team.forEach((t, i) => {
-      if (!t || typeof t.id !== 'string' || !t.text) errs.push(`team[${i}] needs id + text`);
-      if (t && t.id) {
-        if (ids.has(t.id)) errs.push(`duplicate team id ${t.id}`);
-        ids.add(t.id);
-      }
-    });
-  }
-  if (errs.length) throw new Error(`question set "${slug}":\n  - ${errs.join('\n  - ')}`);
-}
-
-// Write the canonical current set (from questions.csv + hardcoded intros).
-writeFileSync(
-  new URL('clt-current.json', setsDir),
-  JSON.stringify(data, null, 2) + '\n',
-  'utf8'
-);
-
-// Build the registry from every other question-set file, skipping the example.
+writeFileSync(new URL('clt-current.json', setsDir), JSON.stringify(data, null, 2) + '\n');
 const registry = {};
 for (const entry of readdirSync(setsDir).sort()) {
-  if (!entry.endsWith('.json')) continue;
+  if (!entry.endsWith('.json') || entry === 'EXAMPLE.json') continue;
   const slug = entry.slice(0, -5);
-  if (slug === 'EXAMPLE') continue;
-  let set;
-  try {
-    set = JSON.parse(readFileSync(new URL(entry, setsDir), 'utf8'));
-  } catch (err) {
-    throw new Error(`question set "${slug}": invalid JSON (${err.message})`);
-  }
-  validateSet(slug, set);
+  const set = JSON.parse(readFileSync(new URL(entry, setsDir), 'utf8'));
+  const all = [...(set.personal || []), ...(set.team || [])];
+  if (!set.title || !set.intros || !set.scales || !Array.isArray(set.sections) || all.length !== 57 || new Set(all.map((q) => q.id)).size !== 57) throw new Error(`${slug}: invalid V5 question set`);
   registry[slug] = set;
-  const screens = Math.ceil(set.team.length / SCREEN_SIZE);
-  console.log(`question set "${slug}": ${set.personal.length} personal, ${set.team.length} team (${screens} screens of ${SCREEN_SIZE})`);
 }
-writeFileSync(
-  new URL('../worker/src/question-sets.json', import.meta.url),
-  JSON.stringify(registry, null, 2) + '\n',
-  'utf8'
-);
-console.log(`wrote question-sets/clt-current.json and worker/src/question-sets.json (${Object.keys(registry).length} set(s) in registry)`);
+writeFileSync(new URL('../worker/src/question-sets.json', import.meta.url), JSON.stringify(registry, null, 2) + '\n');
+console.log(`Wrote fixed V5 set: ${items.length} questions across ${sections.length} sections; ${Object.keys(registry).length} registered set(s).`);

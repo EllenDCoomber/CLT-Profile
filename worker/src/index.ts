@@ -6,6 +6,7 @@ interface Env {
   DB: D1Database;
   ROLE_LEADER_TOKEN: string;
   ROLE_MEMBER_TOKEN: string;
+  ROLE_OBSERVER_TOKEN: string;
   ALLOWED_ORIGIN: string;
   ADMIN_KEY: string;
   SURVEY_BASE: string;
@@ -96,7 +97,7 @@ function validateSubmission(body: unknown): Submission {
   const b = body as Record<string, unknown>;
 
   const role = b.role;
-  if (role !== 'leader' && role !== 'member') throw new Error('invalid role');
+  if (role !== 'leader' && role !== 'member' && role !== 'observer') throw new Error('invalid role');
 
   const assessment = typeof b.assessment === 'string' ? b.assessment.trim() : '';
   if (!assessment) throw new Error('assessment required');
@@ -173,7 +174,8 @@ async function handleSubmit(request: Request, env: Env): Promise<Response> {
   const token = new URL(request.url).searchParams.get('t') || '';
   const valid =
     (submission.role === 'leader' && timingSafeEqual(token, env.ROLE_LEADER_TOKEN)) ||
-    (submission.role === 'member' && timingSafeEqual(token, env.ROLE_MEMBER_TOKEN));
+    (submission.role === 'member' && timingSafeEqual(token, env.ROLE_MEMBER_TOKEN)) ||
+    (submission.role === 'observer' && timingSafeEqual(token, env.ROLE_OBSERVER_TOKEN));
   if (!valid) return submitJson(env, { error: 'invalid role token' }, 403);
 
   const id = crypto.randomUUID();
@@ -215,11 +217,11 @@ function toCsv(rows: unknown[], set: QuestionSet): string {
   const lines = [header.concat(questionIds).join(',')];
   for (const row of rows) {
     const r = row as { role: string; company: string; department: string; submittedAt: string; answers: AnswerRecord[] };
-    const byId: Record<string, number | null> = {};
-    for (const a of r.answers) byId[a.id] = a.value;
+    const byId: Record<string, string> = {};
+    for (const a of r.answers) byId[a.id] = a.label;
     lines.push([
       esc(r.role), esc(r.company), esc(r.department), esc(r.submittedAt)
-    ].concat(questionIds.map((id) => byId[id] != null ? String(byId[id]) : '')).join(','));
+    ].concat(questionIds.map((id) => esc(byId[id] || ''))).join(','));
   }
   return lines.join('\n');
 }
@@ -267,7 +269,8 @@ async function handleCreateAssessment(request: Request, env: Env): Promise<Respo
     created_at: now,
     links: {
       leader: env.SURVEY_BASE + '?t=' + env.ROLE_LEADER_TOKEN + '&a=' + encodeURIComponent(id),
-      member: env.SURVEY_BASE + '?t=' + env.ROLE_MEMBER_TOKEN + '&a=' + encodeURIComponent(id)
+      member: env.SURVEY_BASE + '?t=' + env.ROLE_MEMBER_TOKEN + '&a=' + encodeURIComponent(id),
+      observer: env.SURVEY_BASE + '?t=' + env.ROLE_OBSERVER_TOKEN + '&a=' + encodeURIComponent(id)
     }
   }, 201);
 }
@@ -279,6 +282,7 @@ async function handleListAssessments(request: Request, env: Env): Promise<Respon
     `SELECT a.id, a.company, a.team_name, a.question_set_id, a.label, a.created_at,
             (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'leader') AS leaders,
             (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'member') AS members,
+            (SELECT COUNT(*) FROM responses r WHERE r.assessment = a.id AND r.role = 'observer') AS observers,
             (SELECT MAX(r.created_at) FROM responses r WHERE r.assessment = a.id) AS last_at
      FROM assessments a ORDER BY a.created_at DESC`
   ).all();
@@ -297,9 +301,11 @@ async function handleListAssessments(request: Request, env: Env): Promise<Respon
       lastResponseAt: r.last_at || null,
       leaderCount: Number(r.leaders || 0),
       memberCount: Number(r.members || 0),
+      observerCount: Number(r.observers || 0),
       links: {
         leader: env.SURVEY_BASE + '?t=' + env.ROLE_LEADER_TOKEN + '&a=' + encodeURIComponent(r.id),
-        member: env.SURVEY_BASE + '?t=' + env.ROLE_MEMBER_TOKEN + '&a=' + encodeURIComponent(r.id)
+        member: env.SURVEY_BASE + '?t=' + env.ROLE_MEMBER_TOKEN + '&a=' + encodeURIComponent(r.id),
+        observer: env.SURVEY_BASE + '?t=' + env.ROLE_OBSERVER_TOKEN + '&a=' + encodeURIComponent(r.id)
       }
     };
   }));
@@ -310,8 +316,7 @@ async function handleListQuestionSets(request: Request, env: Env): Promise<Respo
   return json(Object.entries(questionSets).map(([id, set]) => ({
     id,
     title: set.title,
-    personalCount: set.personal.length,
-    teamCount: set.team.length
+    questionCount: set.personal.length + set.team.length
   })));
 }
 
