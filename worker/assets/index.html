@@ -387,7 +387,6 @@
         <div class="dash-head">
           <div>
             <h1>Assessments</h1>
-            <div class="sub">Collected response data only. Interpretation is completed separately. Each assessment is one team's survey - open one to view its report.</div>
           </div>
           <button class="btn primary" id="btnNew2">+ New assessment</button>
         </div>
@@ -398,7 +397,6 @@
     <div id="viewForm" class="hidden">
       <div class="card">
         <h1 style="margin:0 0 0.4rem">New assessment</h1>
-        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 0.6rem">Create a new team engagement. This generates three shareable links - one for the team leader, one for team members, and one for team observers.</p>
         <form class="form" id="newForm">
           <label>Company name</label>
           <input type="text" id="fCompany" required autocomplete="off">
@@ -434,7 +432,6 @@
           <div class="lbl">Team Observers</div>
           <div class="lbox"><input id="linkObserver" readonly onclick="this.select()"><button class="btn" id="cpObserver">Copy</button></div>
         </div>
-        <div class="hint">Respondents open these links in a browser. Leader, member, and observer answers are kept visibly separate in the portal.</div>
         <div class="actions">
           <button class="btn primary" type="button" id="btnLinksDone">Done</button>
         </div>
@@ -448,13 +445,11 @@
 
       <div class="hero">
         <h1 id="rTitle">Team's answers</h1>
-        <div class="sub" id="rSub"></div>
         <div class="counts" id="rCounts"></div>
       </div>
 
       <div class="card links">
         <h2 style="margin:0 0 0.3rem">Survey links</h2>
-        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 0.7rem">Share these links with this team. If someone loses their link, copy it again here and send it to them.</p>
         <div class="lrow"><div class="lbl">Team Leader</div><div class="lbox"><input id="repLinkLeader" readonly onclick="this.select()"><button class="btn" id="repCpLeader">Copy</button></div></div>
         <div class="lrow"><div class="lbl">Team Members</div><div class="lbox"><input id="repLinkMember" readonly onclick="this.select()"><button class="btn" id="repCpMember">Copy</button></div></div>
         <div class="lrow"><div class="lbl">Team Observers</div><div class="lbox"><input id="repLinkObserver" readonly onclick="this.select()"><button class="btn" id="repCpObserver">Copy</button></div></div>
@@ -462,7 +457,6 @@
 
       <div class="card">
         <div class="exports">
-          <span class="cap">Download the raw answers for this assessment - the same data every chart on this page is drawn from.</span>
           <button class="btn" id="dlCsv">Download CSV</button>
           <button class="btn primary" id="dlJson">Download JSON</button>
         </div>
@@ -471,7 +465,6 @@
       <div class="card">
         <div class="summary-head">
           <h2>Submissions</h2>
-          <span class="sum-note">Each submission is one person's questionnaire. Open one to review the answers, or delete any that look like they could skew the results.</span>
         </div>
         <div id="rSubmissions"></div>
       </div>
@@ -479,7 +472,6 @@
       <div class="card">
         <div class="summary-head">
           <h2>Data-driven summaries</h2>
-          <span class="sum-note">Plain restatements of the recorded answers - click to jump. No scores or interpretation.</span>
         </div>
         <div id="rFindings"></div>
       </div>
@@ -494,7 +486,7 @@
 
       <div id="rGroups"></div>
 
-      <footer>The Creative Leadership Baseline View - collected response data only</footer>
+      <footer>The Creative Leadership Baseline View</footer>
     </div>
 
   </div>
@@ -683,7 +675,6 @@
           '<div class="empty">' +
             '<div class="empty-icon" aria-hidden="true"><span>&#9685;</span></div>' +
             '<div class="empty-title">No assessments yet</div>' +
-            '<div class="empty-sub">Create an assessment to generate shareable links for a team, then collect their responses here.</div>' +
             '<div class="empty-cta"><button class="btn primary" id="btnEmptyNew">+ New assessment</button></div>' +
           '</div>';
         var b = document.getElementById('btnEmptyNew');
@@ -840,10 +831,6 @@
         ? esc(assessRec.company) + ' - ' + esc(assessRec.teamName) + (assessRec.label ? ' · ' + esc(assessRec.label) : '')
         : 'The team\u2019s answers';
 
-      var sub = 'How this team answered the ' + all.length + ' survey statements, shown as their recorded answers. ' +
-        'Leader, member, and observer responses are shown separately; this view does not calculate scores or interpret the data.';
-      document.getElementById('rSub').textContent = sub;
-
       var countsHtml = 'Team Leaders: <b>' + leaders.length + '</b>' +
         ' &nbsp;&nbsp; Team Members: <b>' + members.length + '</b>' +
         ' &nbsp;&nbsp; Team Observers: <b>' + observers.length + '</b>' +
@@ -852,7 +839,7 @@
 
       if (!responsesRaw.length) {
         document.getElementById('rGroups').innerHTML =
-          '<div class="empty">No answers have been submitted yet. Share the assessment links to start collecting responses.</div>';
+          '<div class="empty">No answers yet.</div>';
         return;
       }
 
@@ -1067,7 +1054,7 @@
     function renderSubmissions(Q, responsesRaw) {
       var el = document.getElementById('rSubmissions');
       if (!responsesRaw.length) {
-        el.innerHTML = '<div class="empty">No answers have been submitted yet. Share the assessment links to start collecting responses.</div>';
+        el.innerHTML = '<div class="empty">No answers yet.</div>';
         return;
       }
       var all = (Q.personal || []).concat(Q.team || []);
