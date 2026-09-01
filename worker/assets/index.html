@@ -112,6 +112,25 @@
     .assess .delete-btn:hover { background: #fdeceb; }
     .empty { text-align: center; color: var(--muted); padding: 2.5rem 1rem; }
 
+    /* confirmation modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgb(23 37 42 / 45%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: var(--card); border-radius: 1rem;
+      box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
+      padding: clamp(1.2rem, 3vw, 1.8rem);
+      max-width: 24rem; width: 100%;
+      border: 1px solid #eef2f3;
+    }
+    .modal h3 { margin: 0 0 0.5rem; color: var(--ink); font-size: 1.1rem; }
+    .modal p { margin: 0 0 1.3rem; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+    .modal .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; }
+
     /* report hero */
     .hero {
       background: linear-gradient(135deg, #00b5b8 0%, #00a2a5 60%, #0f8f92 100%);
@@ -436,12 +455,49 @@
 
   </div>
 
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">Delete this?</h3>
+      <p id="confirmMsg"></p>
+      <div class="modal-actions">
+        <button class="btn" type="button" id="confirmCancel">Cancel</button>
+        <button class="btn danger" type="button" id="confirmOk">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
       });
     }
+
+    var confirmResolve = null;
+    function confirmDialog(message, confirmLabel) {
+      document.getElementById('confirmMsg').textContent = message;
+      var okBtn = document.getElementById('confirmOk');
+      okBtn.textContent = confirmLabel || 'Delete';
+      document.getElementById('confirmModal').classList.remove('hidden');
+      okBtn.focus();
+      return new Promise(function (resolve) {
+        confirmResolve = resolve;
+      });
+    }
+    function closeConfirm(result) {
+      document.getElementById('confirmModal').classList.add('hidden');
+      var resolve = confirmResolve;
+      confirmResolve = null;
+      if (resolve) resolve(result);
+    }
+    document.getElementById('confirmOk').addEventListener('click', function () { closeConfirm(true); });
+    document.getElementById('confirmCancel').addEventListener('click', function () { closeConfirm(false); });
+    document.getElementById('confirmModal').addEventListener('click', function (e) {
+      if (e.target.id === 'confirmModal') closeConfirm(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && confirmResolve) closeConfirm(false);
+    });
 
     var state = {
       key: sessionStorage.getItem('clt_key') || '',
@@ -613,9 +669,9 @@
         btn.addEventListener('click', function (e) {
           e.stopPropagation();
           var id = btn.dataset.id;
-          if (confirm('Delete this assessment and all its responses? This cannot be undone.')) {
-            deleteAssessment(id, btn);
-          }
+          confirmDialog('Delete this assessment and all its responses? This cannot be undone.', 'Delete assessment').then(function (ok) {
+            if (ok) deleteAssessment(id, btn);
+          });
         });
       });
     }
@@ -1016,16 +1072,18 @@
         btn.addEventListener('click', function (e) {
           e.stopPropagation();
           var rid = btn.dataset.id;
-          if (!confirm('Delete this submission? This person\u2019s answers will be removed from the results. This cannot be undone.')) return;
-          btn.disabled = true;
-          fetch('/api/responses/' + encodeURIComponent(rid) + '?key=' + encodeURIComponent(state.key), {
-            method: 'DELETE'
-          }).then(function (res) {
-            if (!res.ok) { alert('Could not delete submission. Please try again.'); btn.disabled = false; return; }
-            showReport(state.reportId);
-          }).catch(function () {
-            alert('Could not delete submission. Please try again.');
-            btn.disabled = false;
+          confirmDialog('Delete this submission? This person\u2019s answers will be removed from the results. This cannot be undone.').then(function (ok) {
+            if (!ok) return;
+            btn.disabled = true;
+            fetch('/api/responses/' + encodeURIComponent(rid) + '?key=' + encodeURIComponent(state.key), {
+              method: 'DELETE'
+            }).then(function (res) {
+              if (!res.ok) { alert('Could not delete submission. Please try again.'); btn.disabled = false; return; }
+              showReport(state.reportId);
+            }).catch(function () {
+              alert('Could not delete submission. Please try again.');
+              btn.disabled = false;
+            });
           });
         });
       });
