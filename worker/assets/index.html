@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Creative Leadership Baseline View — Data portal</title>
+  <title>The Creative Leadership Baseline View - Data portal</title>
   <style>
     :root {
       --teal: #00b5b8;
@@ -79,38 +79,82 @@
     .gate .error { color: var(--red); font-size: 0.8rem; margin: -0.4rem 0 0.8rem; display: none; }
 
     /* dashboard */
-    .dash-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .dash-head h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--ink); }
-    .dash-head .sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; max-width: 38rem; }
+    .dash-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .dash-head h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--ink); letter-spacing: -0.01em; }
+    .dash-head .sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; max-width: 38rem; line-height: 1.5; }
     .assess-list { display: grid; gap: 0.8rem; }
     .assess {
-      display: flex; align-items: center; gap: 0.5rem;
-      border: 1px solid #eef2f3; border-radius: 0.8rem; padding: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      border: 1px solid var(--line); border-radius: 0.9rem; padding: 0;
       background: var(--card); width: 100%; overflow: hidden;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      position: relative;
     }
+    .assess::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--teal); opacity: 0; transition: opacity 0.15s ease;
+    }
+    .assess:hover { border-color: var(--teal); box-shadow: 0 0.4rem 1.4rem rgb(0 0 0 / 8%); transform: translateY(-1px); }
+    .assess:hover::before { opacity: 1; }
     .assess .assess-main {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 0.9rem 1.1rem; cursor: pointer; flex: 1; min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem; align-items: center;
+      padding: 1rem 1.2rem; cursor: pointer;
     }
-    .assess:hover { border-color: var(--teal); box-shadow: 0 0.3rem 1rem rgb(0 0 0 / 6%); }
-    .assess .ai { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
-    .assess .ai .alabel {
-      display: inline-block; font-size: 0.72rem; font-weight: 600;
-      color: var(--teal-dark); background: var(--teal-soft);
-      border-radius: 999px; padding: 0.1rem 0.6rem; margin-left: 0.4rem; vertical-align: 0.1rem;
+    .assess .ai-head {
+      display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;
+      font-size: 1.08rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
     }
-    .assess .as { font-size: 0.82rem; color: var(--muted); }
-    .assess .acount { margin-left: auto; text-align: right; white-space: nowrap; }
-    .assess .acount b { font-size: 1rem; }
-    .assess .acount span { font-size: 0.75rem; color: var(--muted); display: block; }
-    .assess .ainfo { min-width: 0; }
+    .assess .ai-head .alabel {
+      font-size: 0.72rem; font-weight: 600; color: var(--teal-dark); background: var(--teal-soft);
+      border-radius: 999px; padding: 0.16rem 0.65rem; line-height: 1.3;
+    }
+    .assess .ai-meta {
+      display: flex; align-items: baseline; gap: 0.25rem 0.45rem; flex-wrap: wrap;
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.45;
+    }
+    .assess .ai-meta .dot-sep { color: var(--line); margin: 0 0.05rem; }
+    .assess .responses { text-align: right; white-space: nowrap; }
+    .assess .resp-total { font-size: 1.35rem; font-weight: 800; line-height: 1; color: var(--ink); letter-spacing: -0.01em; }
+    .assess .resp-cap { display: block; font-size: 0.66rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.25rem; }
+    .assess .rc-row { display: flex; gap: 0.7rem; justify-content: flex-end; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed var(--line); }
+    .assess .rc-item { display: inline-flex; align-items: baseline; gap: 0.3rem; font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1; }
+    .assess .rc-item b { color: var(--ink); font-weight: 700; font-size: 0.82rem; }
+    .assess .rcmark { width: 0.5rem; height: 0.5rem; align-self: center; flex: none; }
+    .assess .rcmark.leader { background: var(--ink); transform: rotate(45deg); }
+    .assess .rcmark.member { background: var(--teal); border-radius: 50%; }
+    .assess .rcmark.observer { background: var(--observer); border-radius: 1px; }
+    .assess .resp-none { font-size: 0.8rem; color: var(--muted); }
     .assess .delete-btn {
-      border: 0; border-left: 1px solid #eef2f3; border-radius: 0;
-      color: var(--red); padding: 0.9rem 1.1rem; cursor: pointer; background: transparent;
-      font-size: 0.85rem; font-weight: 600; flex-shrink: 0;
+      border: 0; border-left: 1px solid var(--line); border-radius: 0;
+      color: var(--muted); cursor: pointer; background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 1.15rem; flex-shrink: 0;
+      transition: color 0.15s ease, background 0.15s ease;
     }
-    .assess .delete-btn:hover { background: #fdeceb; }
-    .empty { text-align: center; color: var(--muted); padding: 2.5rem 1rem; }
+    .assess .delete-btn:hover { color: var(--red); background: #fdeceb; }
+    .assess .delete-btn svg { width: 1.05rem; height: 1.05rem; display: block; }
+    .empty {
+      text-align: center; color: var(--muted); padding: 3.5rem 1.5rem;
+      border: 1px dashed var(--line); border-radius: 0.9rem; background: var(--bg);
+    }
+    .empty .empty-icon {
+      width: 3rem; height: 3rem; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;
+      background: var(--card); border: 1px solid var(--line); border-radius: 50%;
+      font-size: 1.4rem; color: var(--teal-dark);
+    }
+    .empty .empty-title { font-weight: 700; color: var(--ink); font-size: 1rem; margin-bottom: 0.3rem; }
+    .empty .empty-sub { font-size: 0.85rem; max-width: 26rem; margin: 0 auto 1rem; line-height: 1.5; }
+    .empty .empty-cta { text-align: center; }
+    .load { display: flex; align-items: center; justify-content: center; gap: 0.6rem; color: var(--muted); padding: 2.5rem 1rem; font-size: 0.9rem; }
+    .load-spin {
+      width: 1rem; height: 1rem; border-radius: 50%;
+      border: 2px solid var(--line); border-top-color: var(--teal);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* confirmation modal */
     .modal-overlay {
@@ -343,7 +387,7 @@
         <div class="dash-head">
           <div>
             <h1>Assessments</h1>
-            <div class="sub">Collected response data only. Interpretation is completed separately. Each assessment is one team's survey — open one to view its report.</div>
+            <div class="sub">Collected response data only. Interpretation is completed separately. Each assessment is one team's survey - open one to view its report.</div>
           </div>
           <button class="btn primary" id="btnNew2">+ New assessment</button>
         </div>
@@ -354,7 +398,7 @@
     <div id="viewForm" class="hidden">
       <div class="card">
         <h1 style="margin:0 0 0.4rem">New assessment</h1>
-        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 0.6rem">Create a new team engagement. This generates three shareable links — one for the team leader, one for team members, and one for team observers.</p>
+        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 0.6rem">Create a new team engagement. This generates three shareable links - one for the team leader, one for team members, and one for team observers.</p>
         <form class="form" id="newForm">
           <label>Company name</label>
           <input type="text" id="fCompany" required autocomplete="off">
@@ -418,7 +462,7 @@
 
       <div class="card">
         <div class="exports">
-          <span class="cap">Download the raw answers for this assessment — the same data every chart on this page is drawn from.</span>
+          <span class="cap">Download the raw answers for this assessment - the same data every chart on this page is drawn from.</span>
           <button class="btn" id="dlCsv">Download CSV</button>
           <button class="btn primary" id="dlJson">Download JSON</button>
         </div>
@@ -435,7 +479,7 @@
       <div class="card">
         <div class="summary-head">
           <h2>Data-driven summaries</h2>
-          <span class="sum-note">Plain restatements of the recorded answers — click to jump. No scores or interpretation.</span>
+          <span class="sum-note">Plain restatements of the recorded answers - click to jump. No scores or interpretation.</span>
         </div>
         <div id="rFindings"></div>
       </div>
@@ -450,7 +494,7 @@
 
       <div id="rGroups"></div>
 
-      <footer>The Creative Leadership Baseline View — collected response data only</footer>
+      <footer>The Creative Leadership Baseline View - collected response data only</footer>
     </div>
 
   </div>
@@ -590,7 +634,7 @@
         return res.json().then(function (data) { return { ok: res.ok, data: data }; });
       }).then(function (r) {
         if (!r.ok) { document.getElementById('formError').textContent = r.data.error || 'Could not create assessment.'; return; }
-        var summary = esc(company) + ' — ' + esc(team);
+        var summary = esc(company) + ' - ' + esc(team);
         if (label) summary += ' · ' + esc(label);
         document.getElementById('linkSummary').textContent = summary;
         document.getElementById('newForm').closest('.card').classList.add('hidden');
@@ -626,7 +670,7 @@
       form.classList.add('hidden');
       report.classList.add('hidden');
       dash.classList.remove('hidden');
-      document.getElementById('assessList').innerHTML = '<div class="empty">Loading…</div>';
+      document.getElementById('assessList').innerHTML = '<div class="load"><span class="load-spin"></span> Loading&hellip;</div>';
       try {
         var res = await fetch('/api/assessments?key=' + encodeURIComponent(state.key));
         if (!res.ok) throw new Error();
@@ -636,27 +680,44 @@
       }
       if (!state.assessments.length) {
         document.getElementById('assessList').innerHTML =
-          '<div class="empty">No assessments yet. Click "New assessment" to create the first one.</div>';
+          '<div class="empty">' +
+            '<div class="empty-icon" aria-hidden="true"><span>&#9685;</span></div>' +
+            '<div class="empty-title">No assessments yet</div>' +
+            '<div class="empty-sub">Create an assessment to generate shareable links for a team, then collect their responses here.</div>' +
+            '<div class="empty-cta"><button class="btn primary" id="btnEmptyNew">+ New assessment</button></div>' +
+          '</div>';
+        var b = document.getElementById('btnEmptyNew');
+        if (b) b.addEventListener('click', function () { location.hash = '#/new'; });
         return;
       }
       document.getElementById('assessList').innerHTML = state.assessments.map(function (a) {
-        var total = a.leaderCount + a.memberCount + a.observerCount;
-        var qcount = a.questionCount ? ' · ' + a.questionCount + ' questions' : '';
+        var qcount = a.questionCount ? a.questionCount + ' questions' : '';
         var created = formatDate(a.created_at);
-        var last = a.lastResponseAt ? 'Last response: ' + formatDate(a.lastResponseAt) : 'No responses yet';
+        var last = a.lastResponseAt ? 'Last response ' + formatDate(a.lastResponseAt) : 'No responses yet';
+        var metaBits = [];
+        if (a.questionSetTitle) metaBits.push(esc(a.questionSetTitle));
+        if (qcount) metaBits.push(esc(qcount));
+        var meta = metaBits.length ? metaBits.join('<span class="dot-sep">&middot;</span>') + '<span class="dot-sep">&middot;</span>' : '';
+        var total = a.leaderCount + a.memberCount + a.observerCount;
+        var rcBits = '';
+        if (a.leaderCount) rcBits += '<span class="rc-item"><i class="rcmark leader" aria-hidden="true"></i><b>' + a.leaderCount + '</b></span>';
+        if (a.memberCount) rcBits += '<span class="rc-item"><i class="rcmark member" aria-hidden="true"></i><b>' + a.memberCount + '</b></span>';
+        if (a.observerCount) rcBits += '<span class="rc-item"><i class="rcmark observer" aria-hidden="true"></i><b>' + a.observerCount + '</b></span>';
+        var respBlock = total
+          ? '<div class="responses"><div class="resp-total">' + total + '</div><div class="resp-cap">responses</div>' +
+            (rcBits ? '<div class="rc-row">' + rcBits + '</div>' : '') + '</div>'
+          : '<div class="responses resp-none">No responses yet</div>';
+        var trash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
         return '<div class="assess" data-id="' + esc(a.id) + '">' +
           '<div class="assess-main">' +
             '<div class="ainfo">' +
-              '<div class="ai">' + esc(a.company) + ' — ' + esc(a.teamName) +
-              (a.label ? ' <span class="alabel">' + esc(a.label) + '</span>' : '') + '</div>' +
-              '<div class="as">' + esc(a.questionSetTitle || '') + qcount + '</div>' +
-              '<div class="as">created ' + esc(created) + '</div>' +
-              '<div class="as">' + esc(last) + '</div>' +
+              '<div class="ai-head">' + esc(a.company) + ' - ' + esc(a.teamName) +
+              (a.label ? '<span class="alabel">' + esc(a.label) + '</span>' : '') + '</div>' +
+              '<div class="ai-meta">' + meta + esc(created) + '<span class="dot-sep">&middot;</span>' + esc(last) + '</div>' +
             '</div>' +
-            '<div class="acount"><b>' + total + '</b><span>responses</span>' +
-            '<span>' + a.leaderCount + ' leader' + (a.leaderCount === 1 ? '' : 's') + ' · ' + a.memberCount + ' member' + (a.memberCount === 1 ? '' : 's') + ' · ' + a.observerCount + ' observer' + (a.observerCount === 1 ? '' : 's') + '</span></div>' +
+            respBlock +
           '</div>' +
-          '<button class="delete-btn" data-id="' + esc(a.id) + '" title="Delete assessment">Delete</button>' +
+          '<button class="delete-btn" data-id="' + esc(a.id) + '" title="Delete assessment" aria-label="Delete assessment">' + trash + '</button>' +
         '</div>';
       }).join('');
       Array.prototype.forEach.call(document.querySelectorAll('.assess .assess-main'), function (el) {
@@ -729,7 +790,7 @@
       dash.classList.add('hidden');
       form.classList.add('hidden');
       report.classList.remove('hidden');
-      document.getElementById('rGroups').innerHTML = '<div class="empty">Loading…</div>';
+      document.getElementById('rGroups').innerHTML = '<div class="load"><span class="load-spin"></span> Loading&hellip;</div>';
 
       var qsRes = await fetch('/api/questions/' + encodeURIComponent(id));
       var dataRes = await fetch('/api/data?key=' + encodeURIComponent(state.key) + '&assessment=' + encodeURIComponent(id));
@@ -776,7 +837,7 @@
       var observers = responsesRaw.filter(function (r) { return r.role === 'observer'; });
 
       document.getElementById('rTitle').textContent = assessRec
-        ? esc(assessRec.company) + ' — ' + esc(assessRec.teamName) + (assessRec.label ? ' · ' + esc(assessRec.label) : '')
+        ? esc(assessRec.company) + ' - ' + esc(assessRec.teamName) + (assessRec.label ? ' · ' + esc(assessRec.label) : '')
         : 'The team\u2019s answers';
 
       var sub = 'How this team answered the ' + all.length + ' survey statements, shown as their recorded answers. ' +
@@ -961,7 +1022,7 @@
         var scale = scaleFor(section);
         var qs = all.filter(function (q) { return q.section === section.id; });
         var open = section.id === 1 ? ' open' : '';
-        groupsHTML += '<details class="group' + open + '"><summary><span class="gname">Section ' + esc(section.id) + ' — ' + esc(section.title) + '</span>' +
+        groupsHTML += '<details class="group' + open + '"><summary><span class="gname">Section ' + esc(section.id) + ' - ' + esc(section.title) + '</span>' +
           '<span class="gcount">' + qs.length + ' statements</span><span class="caret"></span></summary><div class="gbody">';
         qs.forEach(function (q) {
           groupsHTML += questionHTML(q, scale);
@@ -1045,7 +1106,7 @@
               '<td class="qtext">' + esc(q.text) + '</td>' +
               '<td class="dots-cell">' + miniStrip(r.role, v, scale) + '</td></tr>';
           }).join('');
-          return '<div class="sub-section"><h4>Section ' + esc(section.id) + ' — ' + esc(section.title) + '</h4>' +
+          return '<div class="sub-section"><h4>Section ' + esc(section.id) + ' - ' + esc(section.title) + '</h4>' +
             '<table class="sub-table"><tbody>' + rows + '</tbody></table></div>';
         }).join('');
         var when = formatWhen(r.submittedAt);
