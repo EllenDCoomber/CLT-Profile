@@ -1,5 +1,7 @@
 # The Creative Leadership Baseline View
 
+If `.opencode/MACHINE.md` exists in this repo, read it fully before starting work. It is machine-local (gitignored, never pushed, present only on this machine).
+
 This repository contains the fixed-order questionnaire frontend and the Cloudflare Worker/D1 data portal.
 
 ## Authority
