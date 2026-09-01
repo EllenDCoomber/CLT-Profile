@@ -1,36 +1,1058 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Creative Leadership Baseline View — Data portal</title>
-<style>
-:root{--ink:#183b45;--teal:#218b86;--soft:#eaf5f3;--line:#d9e4e4;--bg:#f6f8f8;--muted:#65777b;--red:#a5332b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}.wrap{max-width:1120px;margin:auto;padding:28px 18px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 18px;box-shadow:0 8px 24px #163b4410}h1,h2{margin:.1em 0 .45em}p{margin:.4em 0 1em}.muted{color:var(--muted)}.hidden{display:none!important}.row,.actions,.links{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.btn,button{border:1px solid var(--teal);background:#fff;color:var(--ink);border-radius:8px;padding:9px 13px;font-weight:650;cursor:pointer}.primary{background:var(--teal);color:#fff}.danger{color:var(--red);border-color:#e8bbb8}.field{display:grid;gap:5px;margin:12px 0}.field input,.field select,#pass{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.assessment{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff}.counts{font-size:13px;color:var(--muted)}.linkrow{display:grid;grid-template-columns:115px 1fr auto;gap:8px;align-items:center;margin:8px 0}.linkrow input{min-width:0;padding:8px;border:1px solid var(--line);border-radius:7px}.role{margin-top:20px;border-top:3px solid var(--teal);padding-top:12px}.submission{border:1px solid var(--line);border-radius:9px;margin:9px 0}.submission summary{cursor:pointer;padding:11px;font-weight:700}.tablewrap{overflow:auto;border-top:1px solid var(--line)}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;vertical-align:top;padding:8px;border-bottom:1px solid #edf1f1}th{background:var(--soft);position:sticky;top:0}.answer{white-space:nowrap;font-weight:650}.error{color:var(--red)}@media(max-width:650px){.linkrow{grid-template-columns:1fr}.wrap{padding:14px 10px}}
-</style><style>
-.strip-guide{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin:0 0 16px}.guide-item{display:flex;gap:7px;align-items:center}.marker{display:inline-block;width:12px;height:12px;flex:none;background:var(--teal);border:2px solid #fff;box-shadow:0 0 0 1px var(--teal)}.marker.leader{background:var(--ink);transform:rotate(45deg);border-radius:1px;box-shadow:0 0 0 1px var(--ink)}.marker.member{border-radius:50%}.marker.observer{border-radius:1px;background:#8a5a00;box-shadow:0 0 0 1px #8a5a00}.answer-section{margin:0 0 18px}.answer-section>h2{margin:0 0 4px}.question-strip{padding:15px 0;border-top:1px solid var(--line)}.question-strip:first-of-type{border-top:0}.question-ref{font-size:12px;font-weight:750;color:var(--muted);margin-right:7px}.question-text{margin:0 0 10px}.role-strip{display:grid;grid-template-columns:100px 1fr;gap:8px;align-items:center;margin:7px 0}.role-label{font-size:12px;font-weight:750;color:var(--muted)}.scale-row{display:grid;grid-template-columns:repeat(var(--scale-count),minmax(62px,1fr));border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}.scale-cell{min-height:34px;display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;padding:5px;border-left:1px solid var(--line)}.scale-cell:first-child{border-left:0}.scale-labels{margin-left:108px;display:grid;grid-template-columns:repeat(var(--scale-count),minmax(62px,1fr));font-size:10px;line-height:1.2;text-align:center;color:var(--muted);gap:0}.scale-labels span{padding:5px 3px}.no-responses{font-size:13px;color:var(--muted);margin:7px 0}@media(max-width:650px){.role-strip{grid-template-columns:1fr}.scale-labels{margin-left:0}.scale-row,.scale-labels{grid-template-columns:repeat(var(--scale-count),minmax(50px,1fr));overflow-x:auto}.role-label{margin-bottom:-4px}}
-.individual-card{margin-top:18px}.individual-submission{border:1px solid var(--line);border-radius:9px;margin:9px 0;background:#fff}.individual-submission summary{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer;font-weight:750}.individual-submission[open] summary{border-bottom:1px solid var(--line)}.individual-body{padding:14px}.individual-section{margin:0 0 18px}.individual-section h3{font-size:15px;margin:0 0 8px}.individual-answer{display:grid;grid-template-columns:minmax(240px,1fr) minmax(310px,1fr);gap:10px;align-items:center;padding:8px 0;border-top:1px solid #edf1f1}.individual-answer:first-of-type{border-top:0}.individual-question{font-size:12px}.mini-scale{display:grid;grid-template-columns:repeat(var(--scale-count),minmax(44px,1fr));border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--bg)}.mini-cell{min-height:28px;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line)}.mini-cell:first-child{border-left:0}.mini-labels{display:grid;grid-template-columns:repeat(var(--scale-count),minmax(44px,1fr));font-size:9px;line-height:1.15;text-align:center;color:var(--muted);margin:4px 0 8px}.mini-labels span{padding:0 2px}@media(max-width:650px){.individual-answer{grid-template-columns:1fr}.mini-scale,.mini-labels{grid-template-columns:repeat(var(--scale-count),minmax(42px,1fr))}}
-</style></head><body><main class="wrap">
-<section id="gate" class="card" style="max-width:460px;margin:10vh auto"><h1>Data portal</h1><p class="muted">The Creative Leadership Baseline View</p><div class="field"><label>Passcode</label><input id="pass" type="password"></div><p id="gateError" class="error"></p><button id="login" class="primary">Continue</button></section>
-<section id="dashboard" class="hidden"><div class="row between"><div><h1>Assessments</h1><p class="muted">Collected response data only. Interpretation is completed separately.</p></div><div class="actions"><button id="newBtn" class="primary">New assessment</button><button id="logout">Log out</button></div></div><div id="list" class="grid"></div></section>
-<section id="newView" class="hidden"><div class="card"><h1>New assessment</h1><form id="newForm"><div class="field"><label>Company</label><input id="company" required></div><div class="field"><label>Team</label><input id="team" required></div><div class="field"><label>Label (optional)</label><input id="label"></div><div class="field"><label>Question set</label><select id="set"></select></div><p id="formError" class="error"></p><div class="actions"><button class="primary">Create assessment</button><button type="button" id="cancel">Cancel</button></div></form></div><div id="created" class="card hidden"><h2>Share these links</h2><div id="createdLinks"></div><button id="done" class="primary">Done</button></div></section>
-<section id="report" class="hidden"><div class="actions"><button id="back">← Assessments</button></div><div class="card"><div class="row between"><div><h1 id="reportTitle">Assessment data</h1><p id="reportMeta" class="muted"></p></div><div class="actions"><button id="csv">Download CSV</button><button id="json">Download JSON</button></div></div><div id="reportLinks"></div></div><div id="responses"></div></section>
-</main><script>
-(function(){
-var state={key:'',assessments:[],sets:[],current:null,Q:null,rows:[]};
-var $=function(id){return document.getElementById(id)},esc=function(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
-function show(id){['gate','dashboard','newView','report'].forEach(function(x){$(x).classList.toggle('hidden',x!==id)})}
-async function api(path,opts){var sep=path.indexOf('?')>=0?'&':'?';var r=await fetch(path+sep+'key='+encodeURIComponent(state.key),opts);if(r.status===401)throw new Error('unauthorized');return r}
-function copy(text,btn){navigator.clipboard.writeText(text).then(function(){var old=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=old},1000)})}
-function linkRows(links,prefix){return[['leader','Team Leader'],['member','Team Member'],['observer','Team Observer']].map(function(x){return'<div class="linkrow"><b>'+x[1]+'</b><input id="'+prefix+x[0]+'" readonly value="'+esc(links[x[0]])+'"><button data-copy="'+esc(links[x[0]])+'">Copy</button></div>'}).join('')}
-document.addEventListener('click',function(e){var b=e.target.closest('[data-copy]');if(b)copy(b.dataset.copy,b)})
-$('login').onclick=async function(){state.key=$('pass').value;try{var r=await api('/api/assessments');if(!r.ok)throw new Error();state.assessments=await r.json();showDash()}catch(e){$('gateError').textContent='Passcode not recognised.'}}
-$('logout').onclick=function(){state={key:'',assessments:[],sets:[],current:null,Q:null,rows:[]};$('pass').value='';show('gate')}
-async function refresh(){var r=await api('/api/assessments');state.assessments=await r.json()}
-function showDash(){show('dashboard');var list=$('list');if(!state.assessments.length){list.innerHTML='<div class="card muted">No assessments yet.</div>';return}list.innerHTML=state.assessments.map(function(a){var total=a.leaderCount+a.memberCount+a.observerCount;return'<article class="assessment" data-id="'+esc(a.id)+'"><h2>'+esc(a.company)+' — '+esc(a.teamName)+'</h2><p class="muted">'+esc(a.label||'')+'</p><p class="counts">'+a.leaderCount+' leader · '+a.memberCount+' member · '+a.observerCount+' observer · '+total+' total</p><div class="actions"><button class="open primary">View data</button><button class="delete danger">Delete</button></div></article>'}).join('');list.querySelectorAll('.assessment').forEach(function(el){el.querySelector('.open').onclick=function(){openReport(el.dataset.id)};el.querySelector('.delete').onclick=async function(){if(!confirm('Delete this assessment and all responses?'))return;await api('/api/assessments/'+encodeURIComponent(el.dataset.id),{method:'DELETE'});await refresh();showDash()}})}
-$('newBtn').onclick=async function(){show('newView');$('created').classList.add('hidden');var r=await api('/api/questionsets');state.sets=await r.json();$('set').innerHTML=state.sets.map(function(s){return'<option value="'+esc(s.id)+'">'+esc(s.title)+' ('+s.questionCount+' questions)</option>'}).join('')}
-$('cancel').onclick=function(){showDash()};$('done').onclick=async function(){await refresh();showDash()};$('back').onclick=function(){showDash()}
-$('newForm').onsubmit=async function(e){e.preventDefault();var body={company:$('company').value,teamName:$('team').value,label:$('label').value,questionSetId:$('set').value};var r=await api('/api/assessments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});var data=await r.json();if(!r.ok){$('formError').textContent=data.error||'Could not create assessment';return}$('createdLinks').innerHTML=linkRows(data.links,'new-');$('created').classList.remove('hidden')}
-async function openReport(id){show('report');var a=state.assessments.find(function(x){return x.id===id});state.current=a;var qr=await fetch('/api/questions/'+encodeURIComponent(id));var dr=await api('/api/data?assessment='+encodeURIComponent(id));state.Q=await qr.json();state.rows=await dr.json();$('reportTitle').textContent=a.company+' — '+a.teamName+(a.label?' · '+a.label:'');$('reportMeta').textContent='57 questions · fixed four-section order · '+state.rows.length+' submitted response'+(state.rows.length===1?'':'s');$('reportLinks').innerHTML=linkRows(a.links,'rep-');renderResponses()}
-function renderResponses(){var roles=[['leader','Team Leader'],['member','Team Members'],['observer','Team Observers']];var byRole={};roles.forEach(function(pair){byRole[pair[0]]=state.rows.filter(function(r){return r.role===pair[0]})});var all=state.Q.personal.concat(state.Q.team);function answerValue(row,id){var found=(row.answers||[]).find(function(a){return a.id===id});return found&&found.value}function markers(role,id,value){return byRole[role].filter(function(row){return answerValue(row,id)===value}).map(function(){return'<span class="marker '+role+'" aria-label="'+esc(role)+' response"></span>'}).join('')}function strip(q,scale){return'<article class="question-strip"><p class="question-text"><span class="question-ref">'+esc(q.ref||q.id)+'</span>'+esc(q.text)+'</p>'+roles.map(function(pair){return'<div class="role-strip"><span class="role-label">'+pair[1]+' ('+byRole[pair[0]].length+')</span><div class="scale-row" style="--scale-count:'+scale.length+'">'+scale.map(function(_,index){return'<div class="scale-cell">'+markers(pair[0],q.id,index+1)+'</div>'}).join('')+'</div></div>'}).join('')+'<div class="scale-labels" style="--scale-count:'+scale.length+'">'+scale.map(function(label){return'<span>'+esc(label)+'</span>'}).join('')+'</div></article>'}var sections=state.Q.sections||[];$('responses').innerHTML='<section class="card"><h2>Recorded answers by question</h2><p class="muted">Each marker is one submitted response. The three respondent groups are displayed separately; this view does not calculate scores or interpret the data.</p><div class="strip-guide"><span class="guide-item"><i class="marker leader"></i> Team Leader</span><span class="guide-item"><i class="marker member"></i> Team Member</span><span class="guide-item"><i class="marker observer"></i> Team Observer</span></div>'+sections.map(function(section){var scale=state.Q.scales[section.scale]||[];var questions=all.filter(function(q){return q.section===section.id});return'<section class="answer-section"><h2>Section '+esc(section.id)+' — '+esc(section.title)+'</h2><p class="muted">'+esc(section.instructions||'')+'</p>'+questions.map(function(q){return strip(q,scale)}).join('')+'</section>'}).join('')+'</section>';renderIndividualSubmissions(all,sections)}
-function renderIndividualSubmissions(all,sections){var labels={leader:'Team Leader',member:'Team Member',observer:'Team Observer'};function answerValue(row,id){var found=(row.answers||[]).find(function(a){return a.id===id});return found&&found.value}function miniAnswer(row,q,scale){var value=answerValue(row,q.id);return'<div class="individual-answer"><div class="individual-question"><span class="question-ref">'+esc(q.ref||q.id)+'</span>'+esc(q.text)+'</div><div class="mini-scale" style="--scale-count:'+scale.length+'">'+scale.map(function(_,index){return'<div class="mini-cell">'+(value===index+1?'<span class="marker '+esc(row.role)+'"></span>':'')+'</div>'}).join('')+'</div></div>'}function sectionDetail(row,section){var scale=state.Q.scales[section.scale]||[];var questions=all.filter(function(q){return q.section===section.id});return'<section class="individual-section"><h3>Section '+esc(section.id)+' — '+esc(section.title)+'</h3><div class="mini-labels" style="--scale-count:'+scale.length+'">'+scale.map(function(label){return'<span>'+esc(label)+'</span>'}).join('')+'</div>'+questions.map(function(q){return miniAnswer(row,q,scale)}).join('')+'</section>'}var ordered=state.rows.slice().sort(function(a,b){return a.submittedAt<b.submittedAt?-1:1});$('responses').innerHTML+='<section class="card individual-card"><h2>Individual submissions</h2><p class="muted">Open a response to see every answer recorded for that individual.</p>'+ordered.map(function(row,index){return'<details class="individual-submission"><summary><span class="marker '+esc(row.role)+'"></span>'+esc(labels[row.role]||row.role)+' · Response '+(index+1)+' · '+esc(new Date(row.submittedAt).toLocaleString())+'</summary><div class="individual-body">'+sections.map(function(section){return sectionDetail(row,section)}).join('')+'</div></details>'}).join('')+'</section>'}
-$('csv').onclick=function(){location.href='/api/data?format=csv&assessment='+encodeURIComponent(state.current.id)+'&key='+encodeURIComponent(state.key)};$('json').onclick=function(){var blob=new Blob([JSON.stringify(state.rows,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='creative-leadership-baseline-view-'+state.current.id+'.json';a.click();URL.revokeObjectURL(a.href)};
-show('gate');
-})();
-</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Creative Leadership Baseline View — Data portal</title>
+  <style>
+    :root {
+      --teal: #00b5b8;
+      --teal-dark: #00a2a5;
+      --teal-soft: #e3f6f6;
+      --ink: #17252a;
+      --muted: #5c6b70;
+      --line: #dfe8ea;
+      --bg: #f5fafa;
+      --card: #ffffff;
+      --na: #c9d4d6;
+      --r1: #d9534f;
+      --r2: #e07b39;
+      --r3: #d9a12b;
+      --r4: #a8c95a;
+      --r5: #2d9c6f;
+      --red: #b3261e;
+      --observer: #8a5a00;
+      --observer-soft: #f4ead6;
+    }
+    * { box-sizing: border-box; }
+    html { font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--ink); }
+    body { margin: 0; line-height: 1.5; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem clamp(1rem, 4vw, 2rem);
+      border-bottom: 1px solid var(--line);
+      background: var(--card);
+      font-size: 0.9rem;
+    }
+    .topbar .mark { font-weight: 700; color: var(--teal-dark); }
+    .topbar .chip {
+      background: var(--teal-soft); color: var(--teal-dark);
+      border-radius: 999px; padding: 0.15rem 0.6rem; font-weight: 600;
+    }
+    .topbar .right { display: flex; align-items: center; gap: 0.8rem; }
+
+    #app { max-width: 58rem; margin: 0 auto; padding: 1.5rem clamp(0.75rem, 3vw, 2rem) 4rem; }
+    .hidden { display: none; }
+
+    .card {
+      background: var(--card); border-radius: 1rem;
+      box-shadow: 0 0.6rem 1.8rem rgb(0 0 0 / 6%);
+      padding: clamp(1.1rem, 2.5vw, 1.6rem);
+      margin-bottom: 1.25rem;
+      border: 1px solid #eef2f3;
+    }
+
+    /* buttons */
+    .btn {
+      border: 1px solid var(--teal); background: var(--card); color: var(--teal-dark);
+      border-radius: 0.6rem; padding: 0.6rem 1.1rem; font-weight: 600; cursor: pointer;
+      font-size: 0.88rem;
+    }
+    .btn:hover { background: var(--teal-soft); }
+    .btn.primary { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .btn.primary:hover { background: var(--teal-dark); }
+    .btn.ghost { border-color: transparent; color: var(--muted); }
+    .btn.ghost:hover { background: transparent; color: var(--ink); }
+    .btn.danger { color: var(--red); border-color: #f0c7c5; }
+    .btn.danger:hover { background: #fdeceb; color: var(--red); }
+
+    /* gate */
+    .gate { max-width: 26rem; margin: 4rem auto 0; text-align: center; }
+    .gate h1 { margin: 0 0 0.5rem; color: var(--teal-dark); font-size: 1.4rem; }
+    .gate p { color: var(--muted); font-size: 0.88rem; margin: 0 0 1.2rem; }
+    .gate input {
+      width: 100%; padding: 0.65rem 0.8rem; font-size: 1rem;
+      border: 1px solid var(--line); border-radius: 0.6rem; margin-bottom: 0.8rem;
+      text-align: center;
+    }
+    .gate .error { color: var(--red); font-size: 0.8rem; margin: -0.4rem 0 0.8rem; display: none; }
+
+    /* dashboard */
+    .dash-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .dash-head h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--ink); }
+    .dash-head .sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; max-width: 38rem; }
+    .assess-list { display: grid; gap: 0.8rem; }
+    .assess {
+      display: flex; align-items: center; gap: 0.5rem;
+      border: 1px solid #eef2f3; border-radius: 0.8rem; padding: 0;
+      background: var(--card); width: 100%; overflow: hidden;
+    }
+    .assess .assess-main {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.1rem; cursor: pointer; flex: 1; min-width: 0;
+    }
+    .assess:hover { border-color: var(--teal); box-shadow: 0 0.3rem 1rem rgb(0 0 0 / 6%); }
+    .assess .ai { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+    .assess .ai .alabel {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      color: var(--teal-dark); background: var(--teal-soft);
+      border-radius: 999px; padding: 0.1rem 0.6rem; margin-left: 0.4rem; vertical-align: 0.1rem;
+    }
+    .assess .as { font-size: 0.82rem; color: var(--muted); }
+    .assess .acount { margin-left: auto; text-align: right; white-space: nowrap; }
+    .assess .acount b { font-size: 1rem; }
+    .assess .acount span { font-size: 0.75rem; color: var(--muted); display: block; }
+    .assess .ainfo { min-width: 0; }
+    .assess .delete-btn {
+      border: 0; border-left: 1px solid #eef2f3; border-radius: 0;
+      color: var(--red); padding: 0.9rem 1.1rem; cursor: pointer; background: transparent;
+      font-size: 0.85rem; font-weight: 600; flex-shrink: 0;
+    }
+    .assess .delete-btn:hover { background: #fdeceb; }
+    .empty { text-align: center; color: var(--muted); padding: 2.5rem 1rem; }
+
+    /* report hero */
+    .hero {
+      background: linear-gradient(135deg, #00b5b8 0%, #00a2a5 60%, #0f8f92 100%);
+      color: #fff; border-radius: 1rem;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1rem 3rem rgb(0 150 153 / 30%);
+    }
+    .hero h1 { margin: 0 0 0.5rem; font-size: clamp(1.5rem, 3.5vw, 2.2rem); line-height: 1.2; }
+    .hero .sub { font-size: 0.95rem; opacity: 0.92; margin-bottom: 1.1rem; max-width: 42rem; }
+    .hero .counts { display: flex; gap: 0.4rem 1.8rem; flex-wrap: wrap; font-size: 0.85rem; }
+    .hero .counts b { font-size: 1.05rem; }
+
+    /* guide / legend */
+    .guide { display: flex; gap: 0.9rem 2rem; flex-wrap: wrap; align-items: center; font-size: 0.85rem; color: var(--muted); }
+    .guide .item { display: flex; align-items: center; gap: 0.45rem; }
+    .marker { width: 0.72rem; height: 0.72rem; flex: none; }
+    .marker.leader { background: var(--ink); transform: rotate(45deg); border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--ink); }
+    .marker.member { background: var(--teal); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--teal); }
+    .marker.observer { background: var(--observer); border-radius: 2px; box-shadow: 0 0 0 1.5px var(--observer); }
+
+    /* distribution strips */
+    details.group { border: 1px solid #eef2f3; border-radius: 0.9rem; background: var(--card); margin-bottom: 1rem; overflow: hidden; box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 5%); }
+    details.group summary {
+      list-style: none; cursor: pointer;
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.95rem 1.2rem;
+    }
+    details.group summary::-webkit-details-marker { display: none; }
+    details.group summary .gname { font-weight: 700; font-size: 1.05rem; }
+    details.group summary .gcount {
+      font-size: 0.72rem; color: var(--muted);
+      background: var(--bg); border: 1px solid var(--line);
+      border-radius: 999px; padding: 0.1rem 0.55rem;
+    }
+    details.group summary .caret {
+      margin-left: auto; width: 0; height: 0;
+      border-left: 0.32rem solid transparent; border-right: 0.32rem solid transparent;
+      border-top: 0.4rem solid var(--muted);
+      transition: transform 0.18s ease;
+    }
+    details.group[open] summary .caret { transform: rotate(180deg); }
+    details.group[open] summary { border-bottom: 1px solid var(--line); }
+    .gbody { padding: 1rem 1.2rem 1.3rem; }
+
+    .q { padding: 0.9rem 0 1.1rem; border-bottom: 1px dashed #e7edef; }
+    .q:last-child { border-bottom: 0; }
+    .q.flash { animation: qflash 2.4s ease-out; border-radius: 0.6rem; }
+    @keyframes qflash { 0% { background: #fff3c4; } 100% { background: transparent; } }
+    .qtext { font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.55rem; }
+    .qtext .tag {
+      display: inline-block; font-size: 0.68rem; color: var(--muted);
+      background: var(--bg); border: 1px solid var(--line); border-radius: 999px;
+      padding: 0.06rem 0.5rem; margin-right: 0.4rem; vertical-align: 0.08rem;
+      white-space: nowrap;
+    }
+
+    .strip { margin-top: 0.4rem; }
+    .strip-grid {
+      display: grid;
+      grid-template-columns: 6rem repeat(var(--z), 1fr);
+      gap: 0.2rem 0.4rem; align-items: end;
+    }
+    .rlbl { font-size: 0.72rem; color: var(--muted); font-weight: 700; padding-bottom: 0.25rem; line-height: 1.2; }
+    .zone {
+      min-height: 2rem;
+      display: flex; align-items: center; justify-content: flex-start; gap: 0.26rem; flex-wrap: wrap;
+      border-bottom: 1px dotted #dfe7e9;
+      border-left: 1px solid #f1f5f6;
+      padding: 0.2rem 0.25rem 0.35rem;
+    }
+    .strip-grid .rlbl + .zone { border-left: 0; }
+    .zone .zcount { font-size: 0.66rem; color: var(--muted); width: 100%; }
+    .dot { width: 0.7rem; height: 0.7rem; }
+    .dot.member { background: var(--teal); border-radius: 50%; box-shadow: 0 1px 2px rgb(0 0 0 / 18%); }
+    .dot.leader {
+      background: var(--ink); transform: rotate(45deg); border: 2px solid #fff;
+      box-shadow: 0 0 0 1.5px var(--ink), 0 2px 5px rgb(0 0 0 / 30%);
+    }
+    .dot.observer { background: var(--observer); border-radius: 2px; box-shadow: 0 0 0 1px var(--observer); }
+    .zlbl { font-size: 0.66rem; color: var(--muted); text-align: center; line-height: 1.3; }
+    .zlbl b { display: block; font-size: 0.6rem; color: #a3b2b6; font-weight: 600; }
+    .na-zone { background: repeating-linear-gradient(45deg, #f2f6f6, #f2f6f6 4px, #eaf0f1 4px, #eaf0f1 8px); }
+
+    /* report links */
+    .links { background: var(--bg); border: 1px solid var(--line); border-radius: 0.8rem; padding: 1rem; border: 0; box-shadow: none; }
+    .links h3 { margin: 0 0 0.7rem; font-size: 0.95rem; }
+    .links .lrow { margin-bottom: 0.8rem; }
+    .links .lrow .lbl { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.3rem; font-weight: 700; }
+    .links .lbox {
+      display: flex; gap: 0.5rem; align-items: center;
+      background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem; padding: 0.45rem 0.55rem;
+    }
+    .links .lbox input { flex: 1; border: 0; font-size: 0.82rem; background: transparent; color: var(--ink); min-width: 0; }
+    .links .lbox input:focus { outline: none; }
+
+    .summary-head { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .summary-head h2 { margin: 0; font-size: 1.15rem; color: var(--ink); }
+    .sum-note { font-size: 0.78rem; color: var(--muted); }
+
+    /* findings */
+    .findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .fblock { border: 1px solid #eef2f3; background: var(--bg); border-radius: 0.8rem; padding: 0.85rem 1rem; }
+    .fblock:hover { border-color: var(--teal); }
+    .fblock.muted { background: #f7f9fa; border-style: dashed; }
+    .fblock.muted .ftitle { color: var(--muted); }
+    .fblock .ftitle { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; }
+    .fblock .fref { font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+    .fblock .fprinc { font-size: 0.68rem; color: var(--muted); background: #e8edef; border-radius: 999px; padding: 0.04rem 0.5rem; margin-left: 0.35rem; vertical-align: 0.1rem; }
+    .fblock .fhit { cursor: pointer; border-top: 1px dashed #edf1f2; padding-top: 0.45rem; margin-top: 0.45rem; }
+    .fblock .fhit:first-of-type { border-top: 0; }
+    .fblock .fhit:hover .fref { color: var(--teal-dark); }
+    .fblock .fdata { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
+    .fblock .fdata b { color: var(--ink); }
+    .fblock .fdata.muted { color: #a3b2b6; }
+    .fblock .fmore { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
+
+    /* exports */
+    .exports { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .exports .cap { width: 100%; text-align: center; font-size: 0.78rem; color: var(--muted); }
+
+    /* individual submissions */
+    .submission {
+      border: 1px solid #eef2f3; border-radius: 0.6rem; margin-bottom: 0.5rem; overflow: hidden; background: var(--card);
+    }
+    .submission.open { border-color: var(--teal); }
+    .submission .sub-head {
+      display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem; cursor: pointer; user-select: none;
+    }
+    .submission .sub-head .who-dot { width: 0.8rem; height: 0.8rem; flex: none; }
+    .submission .chev { width: 0.7rem; height: 0.7rem; flex-shrink: 0; transition: transform 0.15s ease; color: var(--muted); }
+    .submission.open .chev { transform: rotate(90deg); }
+    .submission .who { min-width: 8rem; }
+    .submission .who .role { font-weight: 700; font-size: 0.9rem; }
+    .submission .who .when { font-size: 0.75rem; color: var(--muted); }
+    .submission .sub-actions { margin-left: auto; }
+    .submission .del-sub {
+      border: 0; background: transparent; color: var(--red); cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; padding: 0.3rem 0.5rem; border-radius: 0.4rem;
+    }
+    .submission .del-sub:hover { background: #fdeceb; }
+    .submission .sub-body { display: none; border-top: 1px solid #eef2f3; }
+    .submission.open .sub-body { display: block; }
+    .submission .sub-section { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f2f5f6; }
+    .submission .sub-section:last-child { border-bottom: 0; }
+    .submission .sub-section h4 {
+      margin: 0 0 0.4rem; font-size: 0.8rem; color: var(--muted);
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .submission .sub-table { width: 100%; border-collapse: collapse; }
+    .submission .sub-table th, .submission .sub-table td {
+      text-align: left; vertical-align: top; padding: 0.4rem 0.6rem; font-size: 0.82rem;
+      border-bottom: 1px solid #f2f5f6;
+    }
+    .submission .sub-table tr:last-child td { border-bottom: 0; }
+    .submission .sub-table td.qref { white-space: nowrap; font-weight: 700; color: var(--muted); width: 3.2rem; }
+    .submission .sub-table td.qtext { color: var(--ink); }
+    .submission .sub-table td.dots-cell { width: 12rem; }
+    .submission .min-strip { display: flex; height: 1.1rem; border-radius: 3px; overflow: hidden; border: 1px solid #eef2f3; width: 100%; }
+    .submission .min-strip .mzone {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      border-left: 1px solid rgba(0,0,0,0.05);
+    }
+    .submission .min-strip .mzone:first-child { border-left: 0; }
+    .submission .min-strip .mdot { width: 0.55rem; height: 0.55rem; }
+    .submission .min-strip .mdot.member { background: var(--teal); border-radius: 50%; }
+    .submission .min-strip .mdot.leader { background: var(--ink); transform: rotate(45deg); }
+    .submission .min-strip .mdot.observer { background: var(--observer); border-radius: 1px; }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 1rem 0 2rem; }
+
+    /* new assessment form */
+    .form label { display: block; font-weight: 700; font-size: 0.85rem; margin: 1rem 0 0.35rem; }
+    .form input, .form select {
+      width: 100%; padding: 0.6rem 0.8rem; font-size: 0.95rem;
+      border: 1px solid var(--line); border-radius: 0.6rem;
+    }
+    .form .hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+    .form .actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+    .form .error { color: var(--red); font-size: 0.82rem; margin-top: 0.8rem; }
+
+    .report-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="mark">&#9685; Creative Leadership Baseline View</span>
+    <span class="chip">Data portal</span>
+    <span class="right hidden" id="topRight">
+      <button class="btn ghost" id="btnNewTop">+ New assessment</button>
+      <button class="btn ghost" id="btnHome">All assessments</button>
+      <button class="btn ghost" id="btnLogout">Log out</button>
+    </span>
+  </div>
+
+  <div id="app">
+
+    <div class="card gate" id="viewGate">
+      <h1>Data portal</h1>
+      <p>Enter the passcode to access the assessment reports.</p>
+      <form id="gateForm">
+        <input type="password" id="passcode" placeholder="Passcode" autocomplete="off">
+        <button class="btn primary" type="submit" style="width:100%">Unlock</button>
+      </form>
+      <div class="error" id="gateError">That passcode isn't right.</div>
+    </div>
+
+    <div id="viewDash" class="hidden">
+      <div class="card">
+        <div class="dash-head">
+          <div>
+            <h1>Assessments</h1>
+            <div class="sub">Collected response data only. Interpretation is completed separately. Each assessment is one team's survey — open one to view its report.</div>
+          </div>
+          <button class="btn primary" id="btnNew2">+ New assessment</button>
+        </div>
+        <div class="assess-list" id="assessList"></div>
+      </div>
+    </div>
+
+    <div id="viewForm" class="hidden">
+      <div class="card">
+        <h1 style="margin:0 0 0.4rem">New assessment</h1>
+        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 0.6rem">Create a new team engagement. This generates three shareable links — one for the team leader, one for team members, and one for team observers.</p>
+        <form class="form" id="newForm">
+          <label>Company name</label>
+          <input type="text" id="fCompany" required autocomplete="off">
+          <label>Team name</label>
+          <input type="text" id="fTeam" required placeholder="e.g. Leadership Team" autocomplete="off">
+          <label>Label / round (optional)</label>
+          <input type="text" id="fLabel" placeholder="e.g. Baseline, Round 2, 2026 Q1" autocomplete="off">
+          <div class="hint">Use this to tell assessments for the same team apart (e.g. a first survey vs a re-assessment).</div>
+          <label>Question list</label>
+          <select id="fSet" required></select>
+          <div class="hint" id="fSetHint"></div>
+          <div class="actions">
+            <button class="btn primary" type="submit" id="btnCreate">Create assessment</button>
+            <button class="btn" type="button" id="btnCancel">Cancel</button>
+          </div>
+          <div class="error" id="formError"></div>
+        </form>
+      </div>
+
+      <div class="card links hidden" id="linksBox">
+        <h1 style="margin:0 0 0.4rem">Assessment created</h1>
+        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 1rem" id="linkSummary"></p>
+        <h2 style="font-size:1rem;margin:0 0 0.7rem">Share these links</h2>
+        <div class="lrow">
+          <div class="lbl">Team Leader</div>
+          <div class="lbox"><input id="linkLeader" readonly onclick="this.select()"><button class="btn" id="cpLeader">Copy</button></div>
+        </div>
+        <div class="lrow">
+          <div class="lbl">Team Members</div>
+          <div class="lbox"><input id="linkMember" readonly onclick="this.select()"><button class="btn" id="cpMember">Copy</button></div>
+        </div>
+        <div class="lrow">
+          <div class="lbl">Team Observers</div>
+          <div class="lbox"><input id="linkObserver" readonly onclick="this.select()"><button class="btn" id="cpObserver">Copy</button></div>
+        </div>
+        <div class="hint">Respondents open these links in a browser. Leader, member, and observer answers are kept visibly separate in the portal.</div>
+        <div class="actions">
+          <button class="btn primary" type="button" id="btnLinksDone">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewReport" class="hidden">
+      <div class="report-actions" style="margin-bottom:1rem">
+        <button class="btn ghost" id="btnBack">&#8592; Assessments</button>
+      </div>
+
+      <div class="hero">
+        <h1 id="rTitle">Team's answers</h1>
+        <div class="sub" id="rSub"></div>
+        <div class="counts" id="rCounts"></div>
+      </div>
+
+      <div class="card links">
+        <h2 style="margin:0 0 0.3rem">Survey links</h2>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 0.7rem">Share these links with this team. If someone loses their link, copy it again here and send it to them.</p>
+        <div class="lrow"><div class="lbl">Team Leader</div><div class="lbox"><input id="repLinkLeader" readonly onclick="this.select()"><button class="btn" id="repCpLeader">Copy</button></div></div>
+        <div class="lrow"><div class="lbl">Team Members</div><div class="lbox"><input id="repLinkMember" readonly onclick="this.select()"><button class="btn" id="repCpMember">Copy</button></div></div>
+        <div class="lrow"><div class="lbl">Team Observers</div><div class="lbox"><input id="repLinkObserver" readonly onclick="this.select()"><button class="btn" id="repCpObserver">Copy</button></div></div>
+      </div>
+
+      <div class="card">
+        <div class="exports">
+          <span class="cap">Download the raw answers for this assessment — the same data every chart on this page is drawn from.</span>
+          <button class="btn" id="dlCsv">Download CSV</button>
+          <button class="btn primary" id="dlJson">Download JSON</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="summary-head">
+          <h2>Submissions</h2>
+          <span class="sum-note">Each submission is one person's questionnaire. Open one to review the answers, or delete any that look like they could skew the results.</span>
+        </div>
+        <div id="rSubmissions"></div>
+      </div>
+
+      <div class="card">
+        <div class="summary-head">
+          <h2>Data-driven summaries</h2>
+          <span class="sum-note">Plain restatements of the recorded answers — click to jump. No scores or interpretation.</span>
+        </div>
+        <div id="rFindings"></div>
+      </div>
+
+      <div class="card">
+        <div class="guide">
+          <span class="item"><span class="marker member"></span> One dot = one member's answer</span>
+          <span class="item"><span class="marker leader"></span> A diamond = a leader's answer</span>
+          <span class="item"><span class="marker observer"></span> A square = an observer's answer</span>
+        </div>
+      </div>
+
+      <div id="rGroups"></div>
+
+      <footer>The Creative Leadership Baseline View — collected response data only</footer>
+    </div>
+
+  </div>
+
+  <script>
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    var state = {
+      key: sessionStorage.getItem('clt_key') || '',
+      assessments: [],
+      sets: [],
+      current: null,
+      Q: null,
+      rows: [],
+      reportId: null
+    };
+
+    var gate = document.getElementById('viewGate');
+    var dash = document.getElementById('viewDash');
+    var form = document.getElementById('viewForm');
+    var report = document.getElementById('viewReport');
+    var topRight = document.getElementById('topRight');
+    var RAMP = ['var(--r1)', 'var(--r2)', 'var(--r3)', 'var(--r4)', 'var(--r5)', 'var(--na)'];
+    var TINT = ['rgba(217,83,79,0.09)', 'rgba(224,123,57,0.09)', 'rgba(217,161,43,0.09)', 'rgba(168,201,90,0.09)', 'rgba(45,156,111,0.09)', 'rgba(201,212,214,0.12)'];
+    var ROLE_DEFS = [
+      { id: 'member', label: 'Team Members' },
+      { id: 'observer', label: 'Team Observers' },
+      { id: 'leader', label: 'Team Leader' }
+    ];
+    var ROLE_SINGULAR = { leader: 'Team Leader', member: 'Team Member', observer: 'Team Observer' };
+
+    document.getElementById('gateForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var key = document.getElementById('passcode').value.trim();
+      if (!key) return;
+      document.getElementById('gateError').style.display = 'none';
+      verify(key).then(function (ok) {
+        if (!ok) { document.getElementById('gateError').style.display = 'block'; return; }
+        state.key = key;
+        sessionStorage.setItem('clt_key', key);
+        location.hash = '#/';
+      });
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', function () {
+      sessionStorage.removeItem('clt_key');
+      state.key = '';
+      location.hash = '';
+      location.reload();
+    });
+    document.getElementById('btnHome').addEventListener('click', function () { location.hash = '#/'; });
+    document.getElementById('btnNewTop').addEventListener('click', function () { location.hash = '#/new'; });
+    document.getElementById('btnNew2').addEventListener('click', function () { location.hash = '#/new'; });
+    document.getElementById('btnCancel').addEventListener('click', function () { location.hash = '#/'; });
+    document.getElementById('btnBack').addEventListener('click', function () { location.hash = '#/'; });
+    document.getElementById('btnLinksDone').addEventListener('click', function () { location.hash = '#/'; });
+
+    function copyToClipboard(text, btn) {
+      var inp = document.createElement('textarea');
+      inp.value = text;
+      document.body.appendChild(inp);
+      inp.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(inp);
+      var old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = old; }, 1500);
+    }
+
+    function verify(key) {
+      return fetch('/api/assessments?key=' + encodeURIComponent(key))
+        .then(function (res) { return res.ok; })
+        .catch(function () { return false; });
+    }
+
+    async function loadSets() {
+      if (state.sets.length) return state.sets;
+      var res = await fetch('/api/questionsets?key=' + encodeURIComponent(state.key));
+      state.sets = await res.json();
+      return state.sets;
+    }
+
+    document.getElementById('newForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var company = document.getElementById('fCompany').value.trim();
+      var team = document.getElementById('fTeam').value.trim();
+      var label = document.getElementById('fLabel').value.trim();
+      var setId = document.getElementById('fSet').value;
+      if (!company || !team || !setId) return;
+      document.getElementById('formError').textContent = '';
+      fetch('/api/assessments?key=' + encodeURIComponent(state.key), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company: company, teamName: team, questionSetId: setId, label: label })
+      }).then(function (res) {
+        return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+      }).then(function (r) {
+        if (!r.ok) { document.getElementById('formError').textContent = r.data.error || 'Could not create assessment.'; return; }
+        var summary = esc(company) + ' — ' + esc(team);
+        if (label) summary += ' · ' + esc(label);
+        document.getElementById('linkSummary').textContent = summary;
+        document.getElementById('newForm').closest('.card').classList.add('hidden');
+        document.getElementById('linksBox').classList.remove('hidden');
+        document.getElementById('linkLeader').value = r.data.links.leader;
+        document.getElementById('linkMember').value = r.data.links.member;
+        document.getElementById('linkObserver').value = r.data.links.observer;
+        document.getElementById('cpLeader').onclick = function () { copyToClipboard(r.data.links.leader, this); };
+        document.getElementById('cpMember').onclick = function () { copyToClipboard(r.data.links.member, this); };
+        document.getElementById('cpObserver').onclick = function () { copyToClipboard(r.data.links.observer, this); };
+      });
+    });
+
+    async function deleteAssessment(id, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+      try {
+        var res = await fetch('/api/assessments/' + encodeURIComponent(id) + '?key=' + encodeURIComponent(state.key), {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error();
+        showDash();
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Delete';
+        alert('Could not delete assessment. Please try again.');
+      }
+    }
+
+    async function showDash() {
+      gate.classList.add('hidden');
+      topRight.classList.remove('hidden');
+      form.classList.add('hidden');
+      report.classList.add('hidden');
+      dash.classList.remove('hidden');
+      document.getElementById('assessList').innerHTML = '<div class="empty">Loading…</div>';
+      try {
+        var res = await fetch('/api/assessments?key=' + encodeURIComponent(state.key));
+        if (!res.ok) throw new Error();
+        state.assessments = await res.json();
+      } catch (e) {
+        state.assessments = [];
+      }
+      if (!state.assessments.length) {
+        document.getElementById('assessList').innerHTML =
+          '<div class="empty">No assessments yet. Click "New assessment" to create the first one.</div>';
+        return;
+      }
+      document.getElementById('assessList').innerHTML = state.assessments.map(function (a) {
+        var total = a.leaderCount + a.memberCount + a.observerCount;
+        var qcount = a.questionCount ? ' · ' + a.questionCount + ' questions' : '';
+        var created = formatDate(a.created_at);
+        var last = a.lastResponseAt ? 'Last response: ' + formatDate(a.lastResponseAt) : 'No responses yet';
+        return '<div class="assess" data-id="' + esc(a.id) + '">' +
+          '<div class="assess-main">' +
+            '<div class="ainfo">' +
+              '<div class="ai">' + esc(a.company) + ' — ' + esc(a.teamName) +
+              (a.label ? ' <span class="alabel">' + esc(a.label) + '</span>' : '') + '</div>' +
+              '<div class="as">' + esc(a.questionSetTitle || '') + qcount + '</div>' +
+              '<div class="as">created ' + esc(created) + '</div>' +
+              '<div class="as">' + esc(last) + '</div>' +
+            '</div>' +
+            '<div class="acount"><b>' + total + '</b><span>responses</span>' +
+            '<span>' + a.leaderCount + ' leader' + (a.leaderCount === 1 ? '' : 's') + ' · ' + a.memberCount + ' member' + (a.memberCount === 1 ? '' : 's') + ' · ' + a.observerCount + ' observer' + (a.observerCount === 1 ? '' : 's') + '</span></div>' +
+          '</div>' +
+          '<button class="delete-btn" data-id="' + esc(a.id) + '" title="Delete assessment">Delete</button>' +
+        '</div>';
+      }).join('');
+      Array.prototype.forEach.call(document.querySelectorAll('.assess .assess-main'), function (el) {
+        el.addEventListener('click', function () {
+          var id = el.closest('.assess').dataset.id;
+          location.hash = '#/report/' + encodeURIComponent(id);
+        });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('.delete-btn'), function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var id = btn.dataset.id;
+          if (confirm('Delete this assessment and all its responses? This cannot be undone.')) {
+            deleteAssessment(id, btn);
+          }
+        });
+      });
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      return d.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function formatWhen(iso) {
+      if (!iso) return '';
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      return d.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function showNewForm() {
+      gate.classList.add('hidden');
+      topRight.classList.remove('hidden');
+      dash.classList.add('hidden');
+      report.classList.add('hidden');
+      form.classList.remove('hidden');
+      document.getElementById('newForm').closest('.card').classList.remove('hidden');
+      document.getElementById('linksBox').classList.add('hidden');
+      document.getElementById('fCompany').value = '';
+      document.getElementById('fTeam').value = '';
+      document.getElementById('fLabel').value = '';
+      document.getElementById('formError').textContent = '';
+      var sets = await loadSets();
+      var sel = document.getElementById('fSet');
+      sel.innerHTML = sets.map(function (s) {
+        return '<option value="' + esc(s.id) + '">' + esc(s.title) + ' (' + (s.questionCount) + ' questions)</option>';
+      }).join('');
+      sel.onchange = function () {
+        var s = sets.filter(function (x) { return x.id === sel.value; })[0];
+        if (s) document.getElementById('fSetHint').textContent = s.questionCount + ' questions';
+      };
+      if (sel.options.length) sel.onchange();
+    }
+
+    function ansRowByRole(role, allQ, rows) {
+      var out = [];
+      var byId = {};
+      (rows[role] || []).forEach(function (r) {
+        (r.answers || []).forEach(function (a) { byId[a.id] = a; });
+      });
+      return { list: rows[role] || [], byId: byId };
+    }
+
+    async function showReport(id) {
+      gate.classList.add('hidden');
+      topRight.classList.remove('hidden');
+      dash.classList.add('hidden');
+      form.classList.add('hidden');
+      report.classList.remove('hidden');
+      document.getElementById('rGroups').innerHTML = '<div class="empty">Loading…</div>';
+
+      var qsRes = await fetch('/api/questions/' + encodeURIComponent(id));
+      var dataRes = await fetch('/api/data?key=' + encodeURIComponent(state.key) + '&assessment=' + encodeURIComponent(id));
+      if (!qsRes.ok || !dataRes.ok) {
+        document.getElementById('rGroups').innerHTML = '<div class="empty">Could not load this assessment.</div>';
+        return;
+      }
+      var Q = await qsRes.json();
+      var responses = await dataRes.json();
+      var assessRec = null;
+      state.assessments.forEach(function (a) { if (a.id === id) assessRec = a; });
+      if (!assessRec) {
+        try {
+          var listRes = await fetch('/api/assessments?key=' + encodeURIComponent(state.key));
+          if (listRes.ok) {
+            state.assessments = await listRes.json();
+            state.assessments.forEach(function (a) { if (a.id === id) assessRec = a; });
+          }
+        } catch (e) { /* ignore */ }
+      }
+      state.reportId = id;
+      state.Q = Q;
+      state.rows = responses;
+      state.current = assessRec;
+
+      if (assessRec && assessRec.links) {
+        document.getElementById('repLinkLeader').value = assessRec.links.leader;
+        document.getElementById('repLinkMember').value = assessRec.links.member;
+        document.getElementById('repLinkObserver').value = assessRec.links.observer;
+        document.getElementById('repCpLeader').onclick = function () { copyToClipboard(assessRec.links.leader, this); };
+        document.getElementById('repCpMember').onclick = function () { copyToClipboard(assessRec.links.member, this); };
+        document.getElementById('repCpObserver').onclick = function () { copyToClipboard(assessRec.links.observer, this); };
+      }
+
+      renderReport(Q, responses, assessRec);
+      renderSubmissions(Q, responses);
+    }
+
+    function renderReport(Q, responsesRaw, assessRec) {
+      var all = (Q.personal || []).concat(Q.team || []);
+      var sections = Q.sections || [];
+      var leaders = responsesRaw.filter(function (r) { return r.role === 'leader'; });
+      var members = responsesRaw.filter(function (r) { return r.role === 'member'; });
+      var observers = responsesRaw.filter(function (r) { return r.role === 'observer'; });
+
+      document.getElementById('rTitle').textContent = assessRec
+        ? esc(assessRec.company) + ' — ' + esc(assessRec.teamName) + (assessRec.label ? ' · ' + esc(assessRec.label) : '')
+        : 'The team\u2019s answers';
+
+      var sub = 'How this team answered the ' + all.length + ' survey statements, shown as their recorded answers. ' +
+        'Leader, member, and observer responses are shown separately; this view does not calculate scores or interpret the data.';
+      document.getElementById('rSub').textContent = sub;
+
+      var countsHtml = 'Team Leaders: <b>' + leaders.length + '</b>' +
+        ' &nbsp;&nbsp; Team Members: <b>' + members.length + '</b>' +
+        ' &nbsp;&nbsp; Team Observers: <b>' + observers.length + '</b>' +
+        ' &nbsp;&nbsp; Responses: <b>' + responsesRaw.length + '</b>';
+      document.getElementById('rCounts').innerHTML = countsHtml;
+
+      if (!responsesRaw.length) {
+        document.getElementById('rGroups').innerHTML =
+          '<div class="empty">No answers have been submitted yet. Share the assessment links to start collecting responses.</div>';
+        return;
+      }
+
+      function scaleFor(section) {
+        return (Q.scales && Q.scales[section.scale]) || [];
+      }
+
+      function scaleForQuestion(q) {
+        var sec = sections.filter(function (s) { return s.id === q.section; })[0];
+        return sec ? scaleFor(sec) : [];
+      }
+
+      function roleData(role) {
+        var byId = {};
+        var list = [];
+        responsesRaw.forEach(function (r) {
+          if (r.role !== role) return;
+          list.push(r);
+          (r.answers || []).forEach(function (a) { byId[a.id] = a; });
+        });
+        return { list: list, byId: byId };
+      }
+
+      function zonesFor(roleRec, q, zones) {
+        var counts = [];
+        for (var z = 0; z < zones; z++) counts.push(0);
+        roleRec.list.forEach(function (r) {
+          var a = (r.answers || []).filter(function (x) { return x.id === q.id; })[0];
+          if (a && a.value >= 1 && a.value <= zones) counts[a.value - 1]++;
+        });
+        return counts;
+      }
+
+      function strip(q, scale) {
+        var zones = scale.length;
+        var notObserved = scale[zones - 1] && /not enough opportunity|never considered/i.test(scale[zones - 1]);
+        var html = '<div class="strip"><div class="strip-grid" style="--z:' + zones + '">';
+        ROLE_DEFS.forEach(function (rol) {
+          var rec = roleData(rol.id);
+          var counts = zonesFor(rec, q, zones);
+          html += '<div class="rlbl">' + rol.label + '</div>';
+          for (var z = 0; z < zones; z++) {
+            var isNA = z === zones - 1 && notObserved;
+            html += '<div class="zone' + (isNA && counts[z] ? ' na-zone' : '') + '" style="background:' + TINT[z] + '">';
+            for (var d = 0; d < counts[z]; d++) {
+              html += '<i class="dot ' + rol.id + '" title="' + rol.label + ': ' + scale[z] + '"></i>';
+            }
+            html += '</div>';
+          }
+        });
+        html += '<div class="rlbl"></div>';
+        for (var c = 0; c < zones; c++) {
+          var isNA = c === zones - 1 && notObserved;
+          html += '<div class="zlbl"><span class="scale-word">' + esc(scale[c]) + '</span>' +
+            '<b>' + (isNA ? '&middot;' : (c + 1)) + '</b></div>';
+        }
+        html += '</div></div>';
+        return html;
+      }
+
+      function questionHTML(q, scale) {
+        return '<div class="q" id="q-' + esc(q.id) + '"><div class="qtext"><span class="tag">' + esc(q.ref || q.id) + '</span>' + esc(q.text) + '</div>' +
+          strip(q, scale) + '</div>';
+      }
+
+      function teamCounts(id, role) {
+        var c = [];
+        for (var i = 0; i < 6; i++) c.push(0);
+        var rows = roleData(role).list;
+        rows.forEach(function (r) {
+          var a = (r.answers || []).filter(function (x) { return x.id === id; })[0];
+          if (a && a.value >= 1 && a.value <= 6) c[a.value - 1]++;
+        });
+        return c;
+      }
+
+      function fblock(title, items, noneText) {
+        var html = '<div class="ftitle">' + title + '</div>';
+        if (!items.length) {
+          html += '<div class="fdata muted">' + noneText + '</div>';
+          return '<div class="fblock muted">' + html + '</div>';
+        }
+        items.slice(0, 3).forEach(function (f) {
+          html += '<div class="fhit" onclick="jumpTo(\'' + esc(f.t.id) + '\')">' +
+            '<span class="fref">' + esc(f.t.ref || f.t.id) + '</span>' +
+            (f.t.principle ? '<span class="fprinc">' + esc(f.t.principle) + '</span>' : '') +
+            '<div class="fdata">' + f.line + '</div></div>';
+        });
+        if (items.length > 3) html += '<div class="fmore">+ ' + (items.length - 3) + ' more</div>';
+        return '<div class="fblock">' + html + '</div>';
+      }
+
+      function renderFindings() {
+        var teamScale = Q.teamScale || [];
+        var fOpp = [], fSpread = [], fAgreed = [], fNA = [], fPress = [];
+        var nMembers = members.length;
+        var hasLeaders = leaders.length > 0;
+        var hasObservers = observers.length > 0;
+
+        all.forEach(function (t) {
+          var mc = teamCounts(t.id, 'member');
+          var high = mc[3] + mc[4], low = mc[0] + mc[1];
+          var scale = scaleForQuestion(t);
+          var highWord = scale[3] || 'Often';
+          var lowWord = scale[0] || 'Almost never';
+
+          if (hasLeaders) {
+            leaders.forEach(function (lv) {
+              var la = lv.answers.filter(function (a) { return a.id === t.id; })[0];
+              if (la && la.value === 1 && high >= nMembers - 1) {
+                fOpp.push({ t: t, n: high, line: 'Leader: <b>' + esc(highWord) + '</b> · team <b>' + high + ' of ' + nMembers + '</b> at Often/Almost always' });
+              } else if (la && la.value === 5 && low >= nMembers - 1) {
+                fOpp.push({ t: t, n: low, line: 'Leader: <b>' + esc(lowWord) + '</b> · team <b>' + low + ' of ' + nMembers + '</b> at Almost never/Rarely' });
+              }
+            });
+          }
+
+          var used = mc.slice(0, 5).filter(function (x) { return x > 0; }).length;
+          if (used === 5 && nMembers >= 3) fSpread.push({ t: t, line: '<b>' + nMembers + ' members, 5 different answers</b>' });
+
+          var mx = 0, mi = -1;
+          mc.forEach(function (x, i) { if (i < 5 && x > mx) { mx = x; mi = i; } });
+          if (nMembers >= 2 && mx >= nMembers - 1) fAgreed.push({ t: t, n: mx, line: '<b>' + mx + ' of ' + nMembers + '</b> answered <b>' + esc(scale[mi] || '') + '</b>' });
+
+          if (mc[5] >= Math.max(1, Math.ceil(nMembers / 2))) fNA.push({ t: t, n: mc[5], line: '<b>' + mc[5] + ' of ' + nMembers + '</b> could not observe' });
+
+          if (t.context === 'Pressure Shift' && t.matched) {
+            var cb = teamCounts(t.matched, 'member'), cp = teamCounts(t.id, 'member'), mv = 0;
+            for (var i2 = 0; i2 < 6; i2++) mv += Math.abs(cb[i2] - cp[i2]);
+            if (mv / 2 >= Math.max(2, Math.ceil(nMembers / 2))) fPress.push({ t: t, n: mv / 2, line: '<b>' + mv / 2 + ' of ' + nMembers + '</b> changed vs normally' });
+          }
+        });
+
+        fOpp.sort(function (a, b) { return b.n - a.n; });
+        fAgreed.sort(function (a, b) { return b.n - a.n; });
+        fNA.sort(function (a, b) { return b.n - a.n; });
+        fPress.sort(function (a, b) { return b.n - a.n; });
+
+        var highlights =
+          fblock('Biggest leader\u2013team gap', fOpp, 'Leader and team answered in step on every question.') +
+          fblock('Widest spread', fSpread, 'Members answered consistently on every question.') +
+          fblock('Agreed most', fAgreed, 'No question drew one strong majority answer.') +
+          fblock("Mostly 'not observed'", fNA, 'Almost every question was observable.') +
+          fblock('Changed most under pressure', fPress, 'No question shifted markedly between normal and pressure.');
+        document.getElementById('rFindings').innerHTML = highlights;
+
+        window.jumpTo = function (ref) {
+          var el = document.getElementById('q-' + ref);
+          if (!el) return;
+          var group = el.closest('details.group');
+          if (group && !group.open) group.open = true;
+          function doScroll() {
+            var r = el.getBoundingClientRect();
+            var top = r.top + (window.pageYOffset || document.documentElement.scrollTop) - window.innerHeight / 2 + r.height / 2;
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+          }
+          setTimeout(function () {
+            requestAnimationFrame(function () { requestAnimationFrame(doScroll); });
+          }, 0);
+          el.classList.add('flash');
+          setTimeout(function () { el.classList.remove('flash'); }, 2400);
+        };
+      }
+
+      var groupsHTML = '';
+      sections.forEach(function (section) {
+        var scale = scaleFor(section);
+        var qs = all.filter(function (q) { return q.section === section.id; });
+        var open = section.id === 1 ? ' open' : '';
+        groupsHTML += '<details class="group' + open + '"><summary><span class="gname">Section ' + esc(section.id) + ' — ' + esc(section.title) + '</span>' +
+          '<span class="gcount">' + qs.length + ' statements</span><span class="caret"></span></summary><div class="gbody">';
+        qs.forEach(function (q) {
+          groupsHTML += questionHTML(q, scale);
+        });
+        groupsHTML += '</div></details>';
+      });
+      document.getElementById('rGroups').innerHTML = groupsHTML;
+
+      renderFindings();
+
+      Array.prototype.forEach.call(document.querySelectorAll('details.group'), function (d) {
+        d.addEventListener('toggle', function () {
+          if (!d.open) return;
+          Array.prototype.forEach.call(document.querySelectorAll('details.group[open]'), function (o) {
+            if (o !== d) o.open = false;
+          });
+        });
+      });
+
+      function download(name, content) {
+        var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      document.getElementById('dlCsv').onclick = function () {
+        location.href = '/api/data?format=csv&assessment=' + encodeURIComponent(state.reportId) + '&key=' + encodeURIComponent(state.key);
+      };
+      document.getElementById('dlJson').onclick = function () {
+        var blob = new Blob([JSON.stringify(responsesRaw, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'creative-leadership-baseline-view-' + state.reportId + '.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+    }
+
+    function renderSubmissions(Q, responsesRaw) {
+      var el = document.getElementById('rSubmissions');
+      if (!responsesRaw.length) {
+        el.innerHTML = '<div class="empty">No answers have been submitted yet. Share the assessment links to start collecting responses.</div>';
+        return;
+      }
+      var all = (Q.personal || []).concat(Q.team || []);
+      var sections = Q.sections || [];
+
+      function scaleFor(section) {
+        return (Q.scales && Q.scales[section.scale]) || [];
+      }
+
+      function miniStrip(role, value, scale) {
+        var zones = scale.length;
+        var notObserved = scale[zones - 1] && /not enough opportunity|never considered/i.test(scale[zones - 1]);
+        var html = '';
+        for (var z = 0; z < zones; z++) {
+          var isNA = z === zones - 1 && notObserved;
+          html += '<div class="mzone" style="background:' + TINT[z] + '">';
+          if (value === z + 1) html += '<i class="mdot ' + role + '" style="box-shadow:none"></i>';
+          html += '</div>';
+        }
+        return '<div class="min-strip">' + html + '</div>';
+      }
+
+      var sorted = responsesRaw.slice().sort(function (a, b) {
+        return a.submittedAt < b.submittedAt ? -1 : 1;
+      });
+      el.innerHTML = sorted.map(function (r, index) {
+        var roleLabel = ROLE_SINGULAR[r.role] || r.role;
+        var byId = {};
+        (r.answers || []).forEach(function (a) { byId[a.id] = a; });
+        var sectionsHtml = sections.map(function (section) {
+          var scale = scaleFor(section);
+          var qs = all.filter(function (q) { return q.section === section.id; });
+          var rows = qs.map(function (q) {
+            var v = byId[q.id] ? byId[q.id].value : null;
+            return '<tr><td class="qref">' + esc(q.ref || q.id) + '</td>' +
+              '<td class="qtext">' + esc(q.text) + '</td>' +
+              '<td class="dots-cell">' + miniStrip(r.role, v, scale) + '</td></tr>';
+          }).join('');
+          return '<div class="sub-section"><h4>Section ' + esc(section.id) + ' — ' + esc(section.title) + '</h4>' +
+            '<table class="sub-table"><tbody>' + rows + '</tbody></table></div>';
+        }).join('');
+        var when = formatWhen(r.submittedAt);
+        var chev = '<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M8.6 4l8 8-8 8 1.8 1.8L20 12 10.4 2.2z"/></svg>';
+        return '<div class="submission" data-id="' + esc(r.id) + '">' +
+          '<div class="sub-head">' +
+            '<span class="who-dot marker ' + esc(r.role) + '"></span>' +
+            chev +
+            '<div class="who"><div class="role">' + roleLabel + '</div>' +
+            '<div class="when">' + esc(when) + '</div></div>' +
+            '<div class="sub-actions"><button type="button" class="del-sub" data-id="' + esc(r.id) + '">Delete</button></div>' +
+          '</div>' +
+          '<div class="sub-body">' + sectionsHtml + '</div>' +
+        '</div>';
+      }).join('');
+
+      Array.prototype.forEach.call(el.querySelectorAll('.sub-head'), function (head) {
+        head.addEventListener('click', function (e) {
+          if (e.target.closest('.del-sub')) return;
+          head.closest('.submission').classList.toggle('open');
+        });
+      });
+      Array.prototype.forEach.call(el.querySelectorAll('.del-sub'), function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var rid = btn.dataset.id;
+          if (!confirm('Delete this submission? This person\u2019s answers will be removed from the results. This cannot be undone.')) return;
+          btn.disabled = true;
+          fetch('/api/responses/' + encodeURIComponent(rid) + '?key=' + encodeURIComponent(state.key), {
+            method: 'DELETE'
+          }).then(function (res) {
+            if (!res.ok) { alert('Could not delete submission. Please try again.'); btn.disabled = false; return; }
+            showReport(state.reportId);
+          }).catch(function () {
+            alert('Could not delete submission. Please try again.');
+            btn.disabled = false;
+          });
+        });
+      });
+    }
+
+    window.addEventListener('hashchange', route);
+    function route() {
+      if (!state.key) return;
+      var h = location.hash;
+      if (h.indexOf('#/report/') === 0) {
+        var id = decodeURIComponent(h.slice('#/report/'.length));
+        showReport(id);
+      } else if (h === '#/new') {
+        showNewForm();
+      } else {
+        showDash();
+      }
+    }
+
+    (function boot() {
+      if (state.key) {
+        verify(state.key).then(function (ok) {
+          if (!ok) { sessionStorage.removeItem('clt_key'); state.key = ''; return; }
+          route();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

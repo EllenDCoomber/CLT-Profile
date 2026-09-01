@@ -18,7 +18,7 @@ This repository contains the fixed-order questionnaire frontend and the Cloudfla
 - Sections 2 and 3 add “Not enough opportunity to observe”.
 - Section 4 adds “Never considered”.
 - Special responses are stored by their distinct label and are not treated as numeric evidence by downstream analysis.
-- The website collects, validates, stores, exports, and displays factual response data. It does not interpret or analyse responses.
+- The website collects, validates, stores, exports, and displays factual response data. "Analysis" in this context means *interpretation* — drawing conclusions, scoring, or recommending. Presenting factual, data-driven summaries of the raw answers (e.g. how many people chose each option, the most/least common answer, which answers were recorded as "Not enough opportunity to observe") is allowed because it simply restates the recorded data. The website must not go further and interpret what the answers mean or judge the team.
 - Leader, member, and observer responses remain visibly separate in the data portal.
 - Question sets are snapshotted when an assessment is created; an existing assessment never changes midstream.
 
