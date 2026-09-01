@@ -39,7 +39,7 @@
     const restored = load();
     const state = {
       page: Number.isInteger(restored.page) && restored.page >= 0 && restored.page <= 4 ? restored.page : 0,
-      answers: restored.answers || {}, company: restored.company || '', department: restored.department || ''
+      answers: restored.answers || {}
     };
     const save = () => localStorage.setItem(key, JSON.stringify(state));
     const clear = () => localStorage.removeItem(key);
@@ -59,12 +59,7 @@
         '<h2>Before you begin</h2><div class="lead">' + intro.about.concat(intro.instructions).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>' +
         '<p>For each statement, choose the response that best reflects how <strong>frequently it has been true in practice</strong> over approximately the last 3 months.</p>' +
         '<ul class="legend">' + q.scales.frequency.map((label) => '<li>' + esc(label) + '</li>').join('') + '</ul>' +
-        '<div class="field"><label>Company name <span class="required-marker">*</span></label><input id="company" value="' + esc(state.company) + '" autocomplete="organization"></div>' +
-        '<div class="field"><label>Department/Team <span class="required-marker">*</span></label><input id="department" value="' + esc(state.department) + '"></div>' +
-        '<p id="fieldError" class="error" hidden>Please enter the company name and department/team before continuing.</p>' +
         '<nav><button class="primary" data-action="next">Begin</button></nav><button class="ghost" data-action="restart">Start over — clear my answers</button></div>';
-      document.getElementById('company').addEventListener('input', (e) => { state.company = e.target.value; save(); });
-      document.getElementById('department').addEventListener('input', (e) => { state.department = e.target.value; save(); });
     }
 
     function scaleFor(section) { return q.scales[section.scale]; }
@@ -97,7 +92,7 @@
     }
 
     async function submit() {
-      const payload = { role, assessment, company: state.company.trim(), department: state.department.trim(), submittedAt: new Date().toISOString(),
+      const payload = { role, assessment, submittedAt: new Date().toISOString(),
         answers: all.map((item) => ({ id: item.id, ref: item.ref, context: item.context, principle: item.principle, matched: item.matched,
           value: state.answers[item.id].value, label: state.answers[item.id].label })) };
       if (!config.workerUrl) { renderThanks(false); return; }
@@ -126,7 +121,6 @@
       if (button.dataset.action === 'back') { state.page--; save(); render(); return; }
       if (button.dataset.action !== 'next') return;
       if (state.page === 0) {
-        if (!state.company.trim() || !state.department.trim()) { document.getElementById('fieldError').hidden = false; return; }
         state.page = 1; save(); render(); return;
       }
       const section = q.sections[state.page - 1];
