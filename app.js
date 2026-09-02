@@ -7,6 +7,8 @@
   const token = params.get('t');
   const assessment = params.get('a') || '';
   const role = Object.keys(config.roles).find((key) => config.roles[key] === token) || null;
+  const observerAnonymityCopy = 'Your responses are anonymous. Your name is not associated with your answers, so neither your team, your leader nor Expanding Possibilities can identify who gave any individual response.';
+  const copyright = '(c) Sept 2026 Ellen D Coomber Ltd and Beyond Knowing Ltd.';
 
   if (!token) {
     document.title = bundled.title;
@@ -44,7 +46,8 @@
     const save = () => localStorage.setItem(key, JSON.stringify(state));
     const clear = () => localStorage.removeItem(key);
     const intro = q.intros[role];
-    document.title = intro.heading + ' – ' + intro.version.replace(' VERSION', '');
+    const assessmentContext = q.assessmentContext;
+    document.title = intro.heading;
 
     function progress() {
       const answered = Object.keys(state.answers).filter((id) => all.some((q) => q.id === id)).length;
@@ -54,12 +57,16 @@
     }
 
     function renderFront() {
-      app.innerHTML = progress() + '<div class="screen intro"><p class="pill">' + esc(intro.version) + '</p><h1>' + esc(intro.heading) + '</h1>' +
+      const context = assessmentContext?.company && assessmentContext?.teamName
+        ? '<p class="assessment-context">For ' + esc(assessmentContext.company) + ' — ' + esc(assessmentContext.teamName) + '.</p>'
+        : '';
+      const about = role === 'observer' ? [observerAnonymityCopy, ...intro.about.slice(1)] : intro.about;
+      app.innerHTML = progress() + '<div class="screen intro"><h1>' + esc(intro.heading) + '</h1>' + context +
         '<div class="lead">' + intro.lead.map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>' +
-        '<h2>Before you begin</h2><div class="lead">' + intro.about.concat(intro.instructions).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>' +
+        '<h2>Before you begin</h2><div class="lead">' + about.concat(intro.instructions).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>' +
         '<p>For each statement, choose the response that best reflects how <strong>frequently it has been true in practice</strong> over approximately the last 3 months.</p>' +
         '<ul class="legend">' + q.scales.frequency.map((label) => '<li>' + esc(label) + '</li>').join('') + '</ul>' +
-        '<nav><button class="primary" data-action="next">Begin</button></nav><button class="ghost" data-action="restart">Start over — clear my answers</button></div>';
+        '<nav><button class="primary" data-action="next">Begin</button></nav><p class="copyright">' + esc(copyright) + '</p></div>';
     }
 
     function scaleFor(section) { return q.scales[section.scale]; }
@@ -117,7 +124,6 @@
     app.addEventListener('click', (event) => {
       const button = event.target.closest('[data-action]');
       if (!button) return;
-      if (button.dataset.action === 'restart') { clear(); location.reload(); return; }
       if (button.dataset.action === 'back') { state.page--; save(); render(); return; }
       if (button.dataset.action !== 'next') return;
       if (state.page === 0) {

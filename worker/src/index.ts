@@ -322,8 +322,15 @@ async function handleListQuestionSets(request: Request, env: Env): Promise<Respo
 
 async function handleAssessmentQuestions(request: Request, env: Env, assessmentId: string): Promise<Response> {
   const assessment = await getAssessment(env, assessmentId);
-  if (!assessment) return json({ error: 'unknown assessment' }, 404);
-  return json(JSON.parse(assessment.questions));
+  if (!assessment) return json({ error: 'unknown assessment' }, 404, corsHeaders(env));
+  const set = JSON.parse(assessment.questions) as QuestionSet;
+  return json({
+    ...set,
+    assessmentContext: {
+      company: assessment.company,
+      teamName: assessment.team_name
+    }
+  }, 200, corsHeaders(env));
 }
 
 async function handleData(request: Request, env: Env): Promise<Response> {

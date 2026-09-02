@@ -74,6 +74,21 @@ body {
   margin-bottom: 0.85rem;
 }
 
+.assessment-context {
+  margin: 0 0 1.5rem;
+  color: var(--teal-dark);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.copyright {
+  margin: 2.25rem 0 0;
+  color: #7b8588;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
 .lead p {
   line-height: 1.6;
   margin: 0 0 1rem;
@@ -339,20 +354,6 @@ nav button:first-child:only-child {
 
 .btn.primary:hover {
   background: var(--teal);
-}
-
-button.ghost {
-  background: transparent;
-  border-color: transparent;
-  color: var(--muted);
-  font-weight: 400;
-  text-decoration: underline;
-  padding: 0.4rem 0.2rem;
-}
-
-button.ghost:hover {
-  border-color: transparent;
-  color: var(--ink);
 }
 
 .signoff {
