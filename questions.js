@@ -542,7 +542,7 @@ window.CLT_QUESTIONS = {
       "subPremise": "When we are led by spirit /intuition we create beyond what we think is rationally possible",
       "behaviour": "receptivity to creative spirit",
       "matched": null,
-      "text": "...when we are under pressure to act quickly, it remains open to an intuitive insight that could change its current direction."
+      "text": "...when we are under pressure to act quickly, we remain open to an intuitive insight that could change our current direction."
     },
     {
       "id": "S29",
