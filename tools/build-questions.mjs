@@ -34,7 +34,7 @@ const items = rows.filter((r) => r[at('Reference')]).map((r) => ({
 if (items.length !== 57) throw new Error(`Expected 57 fixed-order questions, found ${items.length}`);
 for (let i = 1; i <= 4; i++) if (!items.some((q) => q.section === i)) throw new Error(`Missing Section ${i}`);
 
-const PRODUCT = 'The Creative Leadership Baseline View';
+const PRODUCT = 'The Creative Leadership Team Profile';
 const COMMON_LEAD = [
   PRODUCT + ' shows how this leadership team currently creates results and how that changes under pressure.',
   'It is a snapshot in time that allows the engagement to be designed around the specific needs, dynamics and priorities of this leadership team. It provides a baseline for strengthening how the team works together and delivers against its strategic priorities.',

@@ -1,4 +1,4 @@
-# The Creative Leadership Baseline View
+# The Creative Leadership Team Profile
 
 If `.opencode/MACHINE.md` exists in this repo, read it fully before starting work. It is machine-local (gitignored, never pushed, present only on this machine).
 
@@ -13,7 +13,7 @@ This repository contains the fixed-order questionnaire frontend and the Cloudfla
 
 ## Non-negotiable behaviour
 
-- Product name: **The Creative Leadership Baseline View**.
+- Product name: **The Creative Leadership Team Profile**.
 - Questions are never randomised. They appear in the approved order within four sections.
 - Roles are Team Leader (`oak`), Team Member (`maple`), and Team Observer (`cedar`).
 - Section 1 has five frequency responses.

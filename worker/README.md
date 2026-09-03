@@ -1,4 +1,4 @@
-# Creative Leadership Baseline View — Cloudflare Worker
+# Creative Leadership Team Profile — Cloudflare Worker
 
 The Worker stores questionnaire submissions in D1 and serves a passcode-protected data portal. The portal deliberately reports raw, factual response data only; interpretation is performed separately using the Creative Leadership skill.
 

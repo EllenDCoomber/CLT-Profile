@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Creative Leadership Baseline View - Data portal</title>
+  <title>The Creative Leadership Team Profile - Data portal</title>
   <style>
     :root {
       --teal: #00b5b8;
@@ -361,7 +361,7 @@
 </head>
 <body>
   <div class="topbar">
-    <span class="mark">&#9685; Creative Leadership Baseline View</span>
+    <span class="mark">&#9685; Creative Leadership Team Profile</span>
     <span class="chip">Data portal</span>
     <span class="right hidden" id="topRight">
       <button class="btn ghost" id="btnNewTop">+ New assessment</button>
@@ -486,7 +486,7 @@
 
       <div id="rGroups"></div>
 
-      <footer>The Creative Leadership Baseline View</footer>
+      <footer>The Creative Leadership Team Profile</footer>
     </div>
 
   </div>
@@ -1045,7 +1045,7 @@
         var blob = new Blob([JSON.stringify(responsesRaw, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'creative-leadership-baseline-view-' + state.reportId + '.json';
+        a.download = 'creative-leadership-team-profile-' + state.reportId + '.json';
         a.click();
         URL.revokeObjectURL(a.href);
       };

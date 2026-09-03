@@ -14,6 +14,9 @@
     'Ellen'
   ];
   const copyright = '(c) Sept 2026 Ellen D Coomber Ltd and Beyond Knowing Ltd.';
+  const productName = 'The Creative Leadership Team Profile';
+  const legacyProductName = 'The Creative Leadership Baseline View';
+  const currentProductCopy = (value) => String(value ?? '').replaceAll(legacyProductName, productName);
 
   if (!token) {
     document.title = bundled.title;
@@ -50,7 +53,12 @@
     };
     const save = () => localStorage.setItem(key, JSON.stringify(state));
     const clear = () => localStorage.removeItem(key);
-    const intro = q.intros[role];
+    const sourceIntro = q.intros[role];
+    const intro = {
+      ...sourceIntro,
+      heading: currentProductCopy(sourceIntro.heading),
+      lead: sourceIntro.lead.map(currentProductCopy)
+    };
     const assessmentContext = q.assessmentContext;
     document.title = intro.heading;
 
