@@ -1,6 +1,7 @@
 {
   "clt-current": {
     "title": "The Creative Leadership Team Profile",
+    "version": "V6",
     "beforeBeginHeading": "Before you begin",
     "timing": "45–60 mins",
     "intros": {
@@ -17,9 +18,9 @@
           "Your responses are combined with those of the other members of your leadership team to create an overall picture of how the team currently operates."
         ],
         "instructions": [
-          "There are no right or wrong answers, and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.",
           "Please consider the questions carefully and answer as honestly and candidly as possible, answering based on what actually happens, rather than what you think should happen or what you would ideally like to be true.",
-          "There are 57 questions across 4 sections. Please allow 45–60 mins to complete."
+          "There is no perfect team. We are simply looking for an honest picture of how you and the team currently operate.",
+          "There are 59 questions across 4 sections. Please allow 45–60 mins to complete."
         ]
       },
       "leader": {
@@ -36,13 +37,13 @@
           "The responses from the other members of the leadership team remain anonymous and are combined to create an overall team picture."
         ],
         "instructions": [
-          "There are no right or wrong answers, and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.",
           "Please consider the questions carefully and answer as honestly and candidly as possible, answering based on what actually happens, rather than what you think should happen or what you would ideally like to be true.",
-          "There are 57 questions across 4 sections. Please allow 45–60 mins to complete."
+          "There is no perfect team. We are simply looking for an honest picture of how you and the team currently operate.",
+          "There are 59 questions across 4 sections. Please allow 45–60 mins to complete."
         ]
       },
       "observer": {
-        "version": "TEAM OBSERVER VERSION",
+        "version": "TEAM SUPPORTER VERSION",
         "heading": "The Creative Leadership Team Profile",
         "lead": [
           "The Creative Leadership Team Profile shows how this leadership team currently creates results and how that changes under pressure.",
@@ -50,12 +51,12 @@
           "There will be a follow-up view approximately 90 days after the offsite, enabling the team to see what’s shifted, where progress has been made and where it wants to focus next."
         ],
         "about": [
-          "Your responses are confidential. Expanding Possibilities may be able to identify your responses as part of the extended team at the offsite, but your individual answers will not be shared with anyone else or reported to the team."
+          "Your responses are anonymous. Your name is not associated with your answers, so neither your team, your leader nor Expanding Possibilities can identify who gave any individual response."
         ],
         "instructions": [
-          "There are no right or wrong answers, and this is not a ranking. We are simply looking for an honest picture of how you and the team currently operate.",
           "Please consider the questions carefully and answer as honestly and candidly as possible, answering based on what actually happens, rather than what you think should happen or what you would ideally like to be true.",
-          "There are 57 questions across 4 sections. Please allow 45–60 mins to complete."
+          "There is no perfect team. We are simply looking for an honest picture of how you and the team currently operate.",
+          "There are 59 questions across 4 sections. Please allow 45–60 mins to complete."
         ]
       }
     },
@@ -191,7 +192,7 @@
         "subPremise": "Creative Structure creates tension - ER and a CR",
         "behaviour": "clear about vision",
         "matched": null,
-        "text": "...we are clear about our strategy and goals"
+        "text": "...we are clear about our strategy."
       },
       {
         "id": "S2",
@@ -202,9 +203,9 @@
         "principle": "Structure",
         "premise": "Tension Seeks Resolution along the path of least resistance",
         "subPremise": "Creative Structure creates tension - ER and a CR",
-        "behaviour": "clear about vision",
+        "behaviour": "clear about execution plan",
         "matched": null,
-        "text": "...our strategy and goals are aligned to the company strategy"
+        "text": "...we are clear about our execution plan that delivers the strategy."
       },
       {
         "id": "S3",
@@ -213,11 +214,11 @@
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
         "principle": "Structure",
-        "premise": "Focus Creates Reality",
-        "subPremise": "Focus on ER taps in natural ability - focus in the how taps you into cage",
-        "behaviour": "Focus on ER vs Fixing Problems",
+        "premise": "Tension Seeks Resolution along the path of least resistance",
+        "subPremise": "Creative Structure creates tension - ER and a CR",
+        "behaviour": "clear about vision",
         "matched": null,
-        "text": "...we stay focused on our goals, putting energy into what matters most."
+        "text": "...our strategy and execution plan are aligned to the company strategy."
       },
       {
         "id": "S4",
@@ -230,7 +231,7 @@
         "subPremise": "Focus on ER taps in natural ability - focus in the how taps you into cage",
         "behaviour": "Focus on ER vs Fixing Problems",
         "matched": null,
-        "text": "...our strategy and goals move us towards what we want to create rather than fixing problems"
+        "text": "...we stay focused on our defined strategy and execution plan (as opposed to adding more to it), putting energy into what matters most."
       },
       {
         "id": "S5",
@@ -239,15 +240,41 @@
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
         "principle": "Structure",
-        "premise": "Let go of old structure to create new (create and adjust)",
-        "subPremise": "can't create the new within an old structure",
-        "behaviour": "let go of the old and change what we are doing",
+        "premise": "Focus Creates Reality",
+        "subPremise": "Focus on ER taps in natural ability - focus in the how taps you into cage",
+        "behaviour": "Focus on execution plan vs day-to-day",
         "matched": null,
-        "text": "...when the company's strategy pivots we change our strategy and goals to align"
+        "text": "...we stay focused on delivering our execution plan as opposed to allowing the day-to-day to take over."
       },
       {
         "id": "S6",
         "ref": "S6",
+        "section": 2,
+        "sectionTitle": "Structures for Success",
+        "context": "Baseline",
+        "principle": "Structure",
+        "premise": "Focus Creates Reality",
+        "subPremise": "Focus on ER taps in natural ability - focus in the how taps you into cage",
+        "behaviour": "Focus on ER vs Fixing Problems",
+        "matched": null,
+        "text": "...our strategy and execution plan move us towards what we want to create rather than fixing problems."
+      },
+      {
+        "id": "S7",
+        "ref": "S7",
+        "section": 2,
+        "sectionTitle": "Structures for Success",
+        "context": "Baseline",
+        "principle": "Structure",
+        "premise": "Let go of old structure to create new (create and adjust)",
+        "subPremise": "can't create the new within an old structure",
+        "behaviour": "let go of the old and change what we are doing",
+        "matched": null,
+        "text": "...when the company's strategy pivots, we change our strategy and execution plan to align."
+      },
+      {
+        "id": "S8",
+        "ref": "S8",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
@@ -259,8 +286,8 @@
         "text": "...in our meetings we are clear on the end results / outcomes of that meeting"
       },
       {
-        "id": "S7",
-        "ref": "S7",
+        "id": "S9",
+        "ref": "S9",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
@@ -272,8 +299,8 @@
         "text": "...at the start of meetings, we take a moment to become present and bring our attention fully into the room."
       },
       {
-        "id": "S8",
-        "ref": "S8",
+        "id": "S10",
+        "ref": "S10",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
@@ -283,32 +310,6 @@
         "behaviour": "Consciously and intentionally create external space",
         "matched": null,
         "text": "...we listen to one another without interrupting and reflect before responding."
-      },
-      {
-        "id": "S9",
-        "ref": "S9",
-        "section": 2,
-        "sectionTitle": "Structures for Success",
-        "context": "Baseline",
-        "principle": "Structure",
-        "premise": "Struture has integrity",
-        "subPremise": "Structure lead us to or away from end result - tension will always seek resolution",
-        "behaviour": "We put in structures that serve us",
-        "matched": null,
-        "text": "...our meetings end with clear decisions, ownership and next steps."
-      },
-      {
-        "id": "S10",
-        "ref": "S10",
-        "section": 2,
-        "sectionTitle": "Structures for Success",
-        "context": "Baseline",
-        "principle": "Structure",
-        "premise": "Tension Seeks Resolution along the path of least resistance",
-        "subPremise": "Creative Structure creates tension - ER and a CR",
-        "behaviour": "Real about current reality",
-        "matched": null,
-        "text": "...we are able to acknowledge the current reality even when it's uncomfortable."
       },
       {
         "id": "S11",
@@ -321,11 +322,37 @@
         "subPremise": "Structure lead us to or away from end result - tension will always seek resolution",
         "behaviour": "We put in structures that serve us",
         "matched": null,
-        "text": "...when we are not getting the results we want, we look at whether we have the most effective structures in place."
+        "text": "...our meetings end with clear decisions, ownership and next steps."
       },
       {
         "id": "S12",
         "ref": "S12",
+        "section": 2,
+        "sectionTitle": "Structures for Success",
+        "context": "Baseline",
+        "principle": "Structure",
+        "premise": "Tension Seeks Resolution along the path of least resistance",
+        "subPremise": "Creative Structure creates tension - ER and a CR",
+        "behaviour": "Real about current reality",
+        "matched": null,
+        "text": "...we are able to acknowledge the current reality even when it's uncomfortable."
+      },
+      {
+        "id": "S13",
+        "ref": "S13",
+        "section": 2,
+        "sectionTitle": "Structures for Success",
+        "context": "Baseline",
+        "principle": "Structure",
+        "premise": "Struture has integrity",
+        "subPremise": "Structure lead us to or away from end result - tension will always seek resolution",
+        "behaviour": "We put in structures that serve us",
+        "matched": null,
+        "text": "...when we are not getting the results we want, we look at whether we have the most effective structures in place."
+      },
+      {
+        "id": "S14",
+        "ref": "S14",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
@@ -337,8 +364,8 @@
         "text": "...we remain with uncertainty long enough for a better answer to emerge."
       },
       {
-        "id": "S13",
-        "ref": "S13",
+        "id": "S15",
+        "ref": "S15",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Baseline",
@@ -350,8 +377,8 @@
         "text": "...we create space for reflection and discovery as well as action."
       },
       {
-        "id": "S14",
-        "ref": "S14",
+        "id": "S16",
+        "ref": "S16",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Matched pressure comparison + pressure availability",
@@ -359,12 +386,12 @@
         "premise": "Space is both internal and external",
         "subPremise": "Need for internal space to receive insights",
         "behaviour": "Pause before responding",
-        "matched": "S13",
+        "matched": "S15",
         "text": "...when difficult issues arise, we make enough space to give a considered response rather than reacting immediately."
       },
       {
-        "id": "S15",
-        "ref": "S15",
+        "id": "S17",
+        "ref": "S17",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Matched pressure comparison + pressure availability",
@@ -372,12 +399,12 @@
         "premise": "Focus Creates Reality",
         "subPremise": "Focus on ER taps in natural ability - focus in the how taps you into cage",
         "behaviour": "Focus on ER vs Fixing Problems",
-        "matched": "S3",
+        "matched": "S4",
         "text": "...when the pressure is high, we remain focused on our goals rather than becoming distracted by noise, drama or other people's opinions."
       },
       {
-        "id": "S16",
-        "ref": "S16",
+        "id": "S18",
+        "ref": "S18",
         "section": 2,
         "sectionTitle": "Structures for Success",
         "context": "Matched pressure comparison + pressure availability",
@@ -385,12 +412,12 @@
         "premise": "hold the tension of space for insights to emerge",
         "subPremise": null,
         "behaviour": "we can hang in the unknown / uncertainty",
-        "matched": "S12",
+        "matched": "S14",
         "text": "...when the pressure is high, people continue to hold out for a stronger rather than a quick answer."
       },
       {
-        "id": "S17",
-        "ref": "S17",
+        "id": "S19",
+        "ref": "S19",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -402,8 +429,8 @@
         "text": "...we hold ourselves accountable to our agreed values and behaviours"
       },
       {
-        "id": "S18",
-        "ref": "S18",
+        "id": "S20",
+        "ref": "S20",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -415,8 +442,8 @@
         "text": "...when something repeatedly does not work, we examine how our own behaviour may be contributing to the result."
       },
       {
-        "id": "S19",
-        "ref": "S19",
+        "id": "S21",
+        "ref": "S21",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -428,8 +455,8 @@
         "text": "...we can acknowledge our contribution to a situation and are willing to take responsibility."
       },
       {
-        "id": "S20",
-        "ref": "S20",
+        "id": "S22",
+        "ref": "S22",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -441,8 +468,8 @@
         "text": "...we can take feedback and/or be challenged without taking it personally."
       },
       {
-        "id": "S21",
-        "ref": "S21",
+        "id": "S23",
+        "ref": "S23",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -454,8 +481,8 @@
         "text": "...we recognise and challenge unhelpful patterns within the team."
       },
       {
-        "id": "S22",
-        "ref": "S22",
+        "id": "S24",
+        "ref": "S24",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -467,8 +494,8 @@
         "text": "...people can voice a deeper sense of what is true even when they cannot yet fully explain it rationally."
       },
       {
-        "id": "S23",
-        "ref": "S23",
+        "id": "S25",
+        "ref": "S25",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -480,8 +507,8 @@
         "text": "...we are willing to question assumptions that are widely accepted when inner knowing suggests they may no longer be effective."
       },
       {
-        "id": "S24",
-        "ref": "S24",
+        "id": "S26",
+        "ref": "S26",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -493,8 +520,8 @@
         "text": "...intuitive intelligence, as well as data and analysis, influences important decisions."
       },
       {
-        "id": "S25",
-        "ref": "S25",
+        "id": "S27",
+        "ref": "S27",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -506,8 +533,8 @@
         "text": "...we can move towards an end result without needing to know every step in advance."
       },
       {
-        "id": "S26",
-        "ref": "S26",
+        "id": "S28",
+        "ref": "S28",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Pressure",
@@ -519,8 +546,8 @@
         "text": "...when we are under pressure to act quickly, it remains open to an intuitive insight that could change its current direction."
       },
       {
-        "id": "S27",
-        "ref": "S27",
+        "id": "S29",
+        "ref": "S29",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Pressure Shift",
@@ -528,12 +555,12 @@
         "premise": "We have Choice",
         "subPremise": "Self-Responsibility under pressure",
         "behaviour": "We take responsibility",
-        "matched": "S19",
+        "matched": "S21",
         "text": "..when challenged or under pressure, people can own their contribution to the situation without becoming defensive or deflecting onto others."
       },
       {
-        "id": "S28",
-        "ref": "S28",
+        "id": "S30",
+        "ref": "S30",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Pressure",
@@ -545,8 +572,8 @@
         "text": "...when under pressure, people still recognise when their own beliefs and assumptions are influencing their behaviour."
       },
       {
-        "id": "S29",
-        "ref": "S29",
+        "id": "S31",
+        "ref": "S31",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -558,8 +585,8 @@
         "text": "...we hold one another accountable to our commitments regardless of role or seniority."
       },
       {
-        "id": "S30",
-        "ref": "S30",
+        "id": "S32",
+        "ref": "S32",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -571,8 +598,8 @@
         "text": "...people are willing to support the team beyond their familiar roles in order to create the end result."
       },
       {
-        "id": "S31",
-        "ref": "S31",
+        "id": "S33",
+        "ref": "S33",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -584,8 +611,8 @@
         "text": "...we serve and champion one another inside and outside the room."
       },
       {
-        "id": "S32",
-        "ref": "S32",
+        "id": "S34",
+        "ref": "S34",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -597,8 +624,8 @@
         "text": "...we use our different perspectives, strengths and ways of working to create something better than any one of us would create alone."
       },
       {
-        "id": "S33",
-        "ref": "S33",
+        "id": "S35",
+        "ref": "S35",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -610,8 +637,8 @@
         "text": "...we actively invite rigorous discussion"
       },
       {
-        "id": "S34",
-        "ref": "S34",
+        "id": "S36",
+        "ref": "S36",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -623,8 +650,8 @@
         "text": "...people are present and engaged rather than distracted by phones, laptops or things happening outside the room."
       },
       {
-        "id": "S35",
-        "ref": "S35",
+        "id": "S37",
+        "ref": "S37",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -636,8 +663,8 @@
         "text": "...when people have something to say they say it in the room rather than having sider conversations afterwards."
       },
       {
-        "id": "S36",
-        "ref": "S36",
+        "id": "S38",
+        "ref": "S38",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -649,8 +676,8 @@
         "text": "...when people collude, we bring the conversation back to focusing on creating the desired end result."
       },
       {
-        "id": "S37",
-        "ref": "S37",
+        "id": "S39",
+        "ref": "S39",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -662,8 +689,8 @@
         "text": "...people are willing to have difficult conversations directly with the person involved, (or an appropriate person or forum) rather than complaining to others who cannot resolve it."
       },
       {
-        "id": "S38",
-        "ref": "S38",
+        "id": "S40",
+        "ref": "S40",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -675,8 +702,8 @@
         "text": "...different opinions improve the quality of our thinking without damaging the quality of our relationships."
       },
       {
-        "id": "S39",
-        "ref": "S39",
+        "id": "S41",
+        "ref": "S41",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Baseline",
@@ -688,8 +715,8 @@
         "text": "...people can support and act on a decision that best serves the agreed outcome, even when it was not their preferred option."
       },
       {
-        "id": "S40",
-        "ref": "S40",
+        "id": "S42",
+        "ref": "S42",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Matched pressure comparison + pressure availability",
@@ -697,12 +724,12 @@
         "premise": "Synergy requires Self-mastery",
         "subPremise": "Conflict creates",
         "behaviour": "Conflict not taken personally",
-        "matched": "S38",
+        "matched": "S40",
         "text": "...when the stakes are high, disagreement can still improve our thinking rather than threatening relationships."
       },
       {
-        "id": "S41",
-        "ref": "S41",
+        "id": "S43",
+        "ref": "S43",
         "section": 3,
         "sectionTitle": "Team Dynamics for Effective Creation",
         "context": "Matched pressure comparison + pressure availability",
@@ -710,12 +737,12 @@
         "premise": "Synergy requires Self-mastery",
         "subPremise": "Creativity requires communication without manipulation",
         "behaviour": "No collusion / Direct Communication",
-        "matched": "S35",
+        "matched": "S37",
         "text": "...under pressure, people continue to say what needs to be said in the room."
       },
       {
-        "id": "S42",
-        "ref": "S42",
+        "id": "S44",
+        "ref": "S44",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -727,8 +754,8 @@
         "text": "My goals are clear and aligned to the teams strategy"
       },
       {
-        "id": "S43",
-        "ref": "S43",
+        "id": "S45",
+        "ref": "S45",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -740,8 +767,8 @@
         "text": "I stay focused on my goals, putting energy into what matters most."
       },
       {
-        "id": "S44",
-        "ref": "S44",
+        "id": "S46",
+        "ref": "S46",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -753,8 +780,8 @@
         "text": "I recognise when I get pulled into busy work rather than activity that progresses the goal."
       },
       {
-        "id": "S45",
-        "ref": "S45",
+        "id": "S47",
+        "ref": "S47",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -766,8 +793,8 @@
         "text": "I allow another person's perspective to change my position."
       },
       {
-        "id": "S46",
-        "ref": "S46",
+        "id": "S48",
+        "ref": "S48",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -779,8 +806,8 @@
         "text": "I can notice when I'm attached to being right and can let go of the attachment"
       },
       {
-        "id": "S47",
-        "ref": "S47",
+        "id": "S49",
+        "ref": "S49",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -792,8 +819,8 @@
         "text": "I notice when fear, urgency or the need for certainty is influencing how I am making a decision."
       },
       {
-        "id": "S48",
-        "ref": "S48",
+        "id": "S50",
+        "ref": "S50",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Pressure",
@@ -805,8 +832,8 @@
         "text": "When under pressure, I can separate what has actually happened from the assumptions I'm making."
       },
       {
-        "id": "S49",
-        "ref": "S49",
+        "id": "S51",
+        "ref": "S51",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -818,8 +845,8 @@
         "text": "I make space in my diary for creative and reflective time."
       },
       {
-        "id": "S50",
-        "ref": "S50",
+        "id": "S52",
+        "ref": "S52",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Matched pressure comparison + pressure availability",
@@ -827,12 +854,12 @@
         "premise": "Space is both internal and external",
         "subPremise": "Need for external space for insights to land",
         "behaviour": "Consciously and intentionally create external space",
-        "matched": "S49",
+        "matched": "S51",
         "text": "Under pressure, I still make space in my diary for creative and reflective time."
       },
       {
-        "id": "S51",
-        "ref": "S51",
+        "id": "S53",
+        "ref": "S53",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",
@@ -844,8 +871,8 @@
         "text": "I share ideas openly and directly, even when I'm unsure how those ideas will be received"
       },
       {
-        "id": "S52",
-        "ref": "S52",
+        "id": "S54",
+        "ref": "S54",
         "section": 4,
         "sectionTitle": "Impact and Contribution",
         "context": "Baseline",

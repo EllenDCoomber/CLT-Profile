@@ -429,7 +429,7 @@
           <div class="lbox"><input id="linkMember" readonly onclick="this.select()"><button class="btn" id="cpMember">Copy</button></div>
         </div>
         <div class="lrow">
-          <div class="lbl">Team Observers</div>
+          <div class="lbl">Team Supporters</div>
           <div class="lbox"><input id="linkObserver" readonly onclick="this.select()"><button class="btn" id="cpObserver">Copy</button></div>
         </div>
         <div class="actions">
@@ -452,7 +452,7 @@
         <h2 style="margin:0 0 0.3rem">Survey links</h2>
         <div class="lrow"><div class="lbl">Team Leader</div><div class="lbox"><input id="repLinkLeader" readonly onclick="this.select()"><button class="btn" id="repCpLeader">Copy</button></div></div>
         <div class="lrow"><div class="lbl">Team Members</div><div class="lbox"><input id="repLinkMember" readonly onclick="this.select()"><button class="btn" id="repCpMember">Copy</button></div></div>
-        <div class="lrow"><div class="lbl">Team Observers</div><div class="lbox"><input id="repLinkObserver" readonly onclick="this.select()"><button class="btn" id="repCpObserver">Copy</button></div></div>
+        <div class="lrow"><div class="lbl">Team Supporters</div><div class="lbox"><input id="repLinkObserver" readonly onclick="this.select()"><button class="btn" id="repCpObserver">Copy</button></div></div>
       </div>
 
       <div class="card">
@@ -480,7 +480,7 @@
         <div class="guide">
           <span class="item"><span class="marker member"></span> One dot = one member's answer</span>
           <span class="item"><span class="marker leader"></span> A diamond = a leader's answer</span>
-          <span class="item"><span class="marker observer"></span> A square = an observer's answer</span>
+          <span class="item"><span class="marker observer"></span> A square = a Team Supporter's answer</span>
         </div>
       </div>
 
@@ -554,10 +554,10 @@
     var TINT = ['rgba(217,83,79,0.09)', 'rgba(224,123,57,0.09)', 'rgba(217,161,43,0.09)', 'rgba(168,201,90,0.09)', 'rgba(45,156,111,0.09)', 'rgba(201,212,214,0.12)'];
     var ROLE_DEFS = [
       { id: 'member', label: 'Team Members' },
-      { id: 'observer', label: 'Team Observers' },
+      { id: 'observer', label: 'Team Supporters' },
       { id: 'leader', label: 'Team Leader' }
     ];
-    var ROLE_SINGULAR = { leader: 'Team Leader', member: 'Team Member', observer: 'Team Observer' };
+    var ROLE_SINGULAR = { leader: 'Team Leader', member: 'Team Member', observer: 'Team Supporter' };
 
     document.getElementById('gateForm').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -833,7 +833,7 @@
 
       var countsHtml = 'Team Leaders: <b>' + leaders.length + '</b>' +
         ' &nbsp;&nbsp; Team Members: <b>' + members.length + '</b>' +
-        ' &nbsp;&nbsp; Team Observers: <b>' + observers.length + '</b>' +
+        ' &nbsp;&nbsp; Team Supporters: <b>' + observers.length + '</b>' +
         ' &nbsp;&nbsp; Responses: <b>' + responsesRaw.length + '</b>';
       document.getElementById('rCounts').innerHTML = countsHtml;
 

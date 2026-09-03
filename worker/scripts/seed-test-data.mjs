@@ -181,7 +181,7 @@ async function submit(role, token, payload) {
 /* ---- main ---- */
 async function main() {
   console.log(`Seeding test data -> ${BASE_URL}`);
-  console.log(`  teams=${TEAMS} members/team=${MEMBERS} leaders/team=${LEADERS} observers/team=${OBSERVERS} scenarios=${DO_SCENARIOS} tag="${TAG}"`);
+  console.log(`  teams=${TEAMS} members/team=${MEMBERS} leaders/team=${LEADERS} supporters/team=${OBSERVERS} scenarios=${DO_SCENARIOS} tag="${TAG}"`);
   if (!ADMIN_KEY) console.log('  (no ADMIN_KEY given; assessment creation may fail if required)');
 
   const teams = [
@@ -228,7 +228,7 @@ async function main() {
       submitted++;
     }
     for (let oi = 0; oi < OBSERVERS; oi++) {
-      const payload = buildPayload('observer', assessment.id, company, `Observer ${oi + 1}`, teamAnswers.observers[oi]);
+      const payload = buildPayload('observer', assessment.id, company, `Supporter ${oi + 1}`, teamAnswers.observers[oi]);
       await submit('observer', 'cedar', payload);
       submitted++;
     }
@@ -236,7 +236,7 @@ async function main() {
     console.log(`  submitted ${submitted} responses`);
     console.log(`  leader link: ${assessment.links.leader}`);
     console.log(`  member link: ${assessment.links.member}`);
-    console.log(`  observer link: ${assessment.links.observer}`);
+    console.log(`  supporter link: ${assessment.links.observer}`);
   }
 
   console.log(`\nDone. Created ${created} assessment(s). Open ${BASE_URL}/ to view.`);

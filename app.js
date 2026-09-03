@@ -64,9 +64,9 @@
 
     function progress() {
       const answered = Object.keys(state.answers).filter((id) => all.some((q) => q.id === id)).length;
-      const count = state.page === 0 ? 'Front page' : answered + ' of 57 answered';
+      const count = state.page === 0 ? 'Front page' : answered + ' of ' + all.length + ' answered';
       return '<div class="progress"><div class="meta"><span>' + count + '</span><span>Page ' + (state.page + 1) + ' of 5</span></div>' +
-        '<div class="bar"><span style="width:' + Math.round(((state.page + (state.page ? answered / 57 : 0)) / 5) * 100) + '%"></span></div></div>';
+        '<div class="bar"><span style="width:' + Math.round(((state.page + (state.page ? answered / all.length : 0)) / 5) * 100) + '%"></span></div></div>';
     }
 
     function renderFront() {

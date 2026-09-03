@@ -8,13 +8,13 @@ Each assessment creates three questionnaire links:
 
 - Team Leader: `?t=oak&a=<assessment-id>`
 - Team Member: `?t=maple&a=<assessment-id>`
-- Team Observer: `?t=cedar&a=<assessment-id>`
+- Team Supporter: `?t=cedar&a=<assessment-id>`
 
 The related environment variables are `ROLE_LEADER_TOKEN`, `ROLE_MEMBER_TOKEN`, and `ROLE_OBSERVER_TOKEN` in `wrangler.jsonc`.
 
 ## Main routes
 
-- `POST /api/submit?t=<role-token>` validates and stores a 57-answer submission.
+- `POST /api/submit?t=<role-token>` validates and stores the snapshotted assessment's complete submission (59 answers for V6).
 - `POST /api/assessments?key=<ADMIN_KEY>` creates and snapshots an assessment.
 - `GET /api/assessments?key=<ADMIN_KEY>` lists assessments, three-role counts, and links.
 - `GET /api/questions/<assessment-id>` returns the snapshotted fixed-order question set.
